@@ -57,7 +57,7 @@
     <div class="container text-center mt-5">
         <h1 class="display-4">Bienvenidos a Vivi Luna</h1>
         <p class="lead">Tu tienda en línea de confianza</p>
-        <a href="#" class="btn btn-primary btn-lg">Explorar Productos</a>
+        <a href="" class="btn btn-primary btn-lg">Explorar Productos</a>
     </div>
     <div id="CarouselInicial" class="carousel slide mt-5" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -68,20 +68,20 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ asset('images/Amiguri.png')}}" class="d-block w-50" alt="amiguri-playholder">
-                    <img src="{{ asset('images/polera_lana.jpg')}}" class="d-block w-50" alt="polera-playholder">
+                    <img src="{{ asset('images/Amiguri.png')}}" class="d-block w-25" alt="amiguri-playholder">
+                    <img src="{{ asset('images/Falda.png')}}" class="d-block w-25" alt="polera-playholder">
                 </div>
             </div>
             <div class="carousel-item active">
                 <div class="d-flex justify-content-center">
-                    <img src="https://via.placeholder.com/800x400" class="d-block w-50" alt="...">
-                    <img src="https://via.placeholder.com/800x400" class="d-block w-50" alt="...">
+                    <img src="{{ asset('images/Fiestas.png')}}" class="d-block w-25" alt="...">
+                    <img src="{{ asset('images/Gorro_extras.png')}}" class="d-block w-25" alt="...">
                 </div>
             </div>
             <div class="carousel-item active">
                 <div class="d-flex justify-content-center">
-                    <img src="https://via.placeholder.com/800x400" class="d-block w-50" alt="...">
-                    <img src="https://via.placeholder.com/800x400" class="d-block w-50" alt="...">
+                    <img src="{{ asset('images/Llaveros.png')}}" class="d-block w-25" alt="...">
+                    <img src="{{ asset('images/Sueter.png')}}" class="d-block w-25" alt="...">
                 </div>
             </div>
         </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <img src="{{ asset('images/polera_lana.jpg')}}" class="card-img-top" alt="Producto 2">
+                    <img src="{{ asset('images/Falda.png')}}" class="card-img-top" alt="Producto 2">
                     <div class="card-body">
                         <h5 class="card-title">Producto 2</h5>
                         Descripcion del Producto 2
@@ -113,7 +113,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <img src="{{ asset('images/Amiguri.png')}}" class="card-img-top" alt="Producto 3">
+                    <img src="{{ asset('images/amigurumi_2.png')}}" class="card-img-top" alt="Producto 3">
                     <div class="card-body">
                         <h5 class="card-title">Producto 3</h5>
                         Descripcion del Producto 3
