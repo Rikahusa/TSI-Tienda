@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +19,11 @@
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(5px);
         }
+        .form-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -26,11 +31,18 @@
         <div class="card" style="max-width: 1000px;">
             <div class="row g-0">
                 <div class="col-md-6">
-                    <img src="images/polera_lana.jpg" alt="Imagen de ejemplo" class="img-fluid" style="object-fit: cover; height: 100%;">
+                    <img src="images/HD.png" alt="Imagen de ejemplo" class="img-fluid" style="object-fit: cover; height: 100%;">
                 </div>
                 <div class="col-md-6">
-                    <div class="card-body">
+                    <!-- Formulario de Login -->
+                    <div class="card-body form-section">
                         <form>
+
+                             <div class="mb-3">
+                                <label for="Rut" class="form-label">Rut Usuario</label>
+                                <input type="text" class="form-control" id="Rut" name="Rut" required>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="usuario" class="form-label">Nombre de usuario</label>
                                 <input type="text" class="form-control" id="usuario" name="nombre">
@@ -39,32 +51,15 @@
                                 <label for="contraseña" class="form-label">Contraseña</label>
                                 <input type="password" class="form-control" name="password" id="contraseña">
                             </div>
+                            
+                            <!-- Mensaje de registro y botón -->
+                            <div class="mb-3 text-center">
+                                <small>Si no se ha registrado, haga clic en el botón "Registrarme"</small>
+                            </div>
+                            
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            <h5>REGISTRESE AQUI:</h5>
-                            <div class="mb-3">
-                                <label for="nuevoUsuario" class="form-label">Nombre de usuario</label>
-                                <input type="text" class="form-control" id="nuevoUsuario" name="nombre">
-                            </div>
-                            <div class="mb-3">
-                                <label for="nuevaContraseña" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" name="password" id="nuevaContraseña">
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="rol" id="flexRadioDefault1" value="Admin">
-                                <label class="form-check-label" for="flexRadioDefault1">Administrador</label>
-                            </div>  
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="rol" id="flexRadioDefault2" value="Usuario" checked>
-                                <label class="form-check-label" for="flexRadioDefault2">Usuario</label>
-                            </div>
-                            <div class="d-flex justify-content-between mt-3">
-                                <button type="submit" class="btn btn-primary">Registrarse</button>
+                                <button type="button" class="btn btn-secondary">Registrarme</button>
                             </div>
                         </form>
                     </div>
