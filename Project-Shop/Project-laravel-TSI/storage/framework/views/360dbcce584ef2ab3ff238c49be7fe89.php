@@ -29,6 +29,17 @@
         .card {
             overflow: hidden;
         }
+        
+        .btn-group-responsive {
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 576px) {
+            .btn-group-responsive {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -121,8 +132,9 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-success">Registrarse</button>
+                                    <div class="d-grid gap-2 d-md-flex">
+                                        <button type="submit" class="btn btn-success me-md-2 flex-fill">Registrarse</button>
+                                        <a href="<?php echo e(url('/')); ?>" class="btn btn-outline-secondary flex-fill">Volver al inicio</a>
                                     </div>
                                 </form>
                             </div>

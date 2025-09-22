@@ -16,6 +16,10 @@ Route::get('/carrito', function () {
     return view('Carrito.index');
 });
 
+Route::get('/', function () {
+    return view('inicio.index');
+});
+
 //Route::get('/registro', function () {
 //    return view('registro.index');
 //});

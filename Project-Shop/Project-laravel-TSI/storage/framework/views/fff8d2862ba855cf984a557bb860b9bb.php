@@ -8,7 +8,7 @@
 </head>
     <title>Document</title>
 </head>
-<body>
+<body style="background-color: thistle">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid justify-content-center">
             <a class="navbar-brand" href="#">Vivi Luna</a>
