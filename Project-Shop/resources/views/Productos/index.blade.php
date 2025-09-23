@@ -10,7 +10,7 @@
                     <img src="{{ asset('images/Amiguri.png')}}" class="card-img-top" alt="Amigurumi">
                     <div class="card-body">
                         <h5 class="card-title">Amigurumi</h5>
-                        <p class="card-text">Amigurumi del mundo Fungi.</p>
+                        <p class="card-text">Amigurumi del reino Fungi.</p>
                         <p class="card-text"><strong>Precio:</strong> $13990</p>
                         <a href="#" class="btn btn-primary">Detalles</a>
                         <a href="#" class="btn btn-primary float-end">Agregar al Carrito</a>
@@ -36,7 +36,7 @@
                     <img src="{{ asset('images/Fiestas.png')}}" class="card-img-top" alt="Fiestas">
                     <div class="card-body">
                         <h5 class="card-title">Fiestas</h5>
-                        <p class="card-text">Regalo sorpresa y fieta de cumpleaños para niños.</p>
+                        <p class="card-text">Regalo sorpresa y fiesta de cumpleaños para niños.</p>
                         <p class="card-text"><strong>Precio:</strong> $23990</p>
                         <a href="#" class="btn btn-primary">Detalles</a>
                         <a href="#" class="btn btn-primary float-end">Agregar al Carrito</a>
@@ -47,7 +47,7 @@
     </div>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Categorías de nuestro productos mas cotizados</h2>
-        <h4 class="text-center mb-4">Puedes encontras nuestra variada seleccion de productos aqui, eligiendo alguno de nuestras categorias</h4>
+        <h4 class="text-center mb-4">Puedes encontras nuestra variada selección de productos aqui, eligiendo alguno de nuestras categorias</h4>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col">
                 <div class="card h-100">

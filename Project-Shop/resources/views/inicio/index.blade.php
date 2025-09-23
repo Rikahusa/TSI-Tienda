@@ -9,29 +9,37 @@
     <div id="CarouselInicial" class="carousel slide mt-5" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#CarouselInicial" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#CarouselInicial" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#CarouselInicial" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#CarouselInicial" data-bs-slide-to="1" class="active"></button>
+            <button type="button" data-bs-target="#CarouselInicial" data-bs-slide-to="2" class="active"></button>
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ asset('images/Amiguri.png')}}" class="d-block w-25" alt="amiguri-playholder">
-                    <img src="{{ asset('images/Falda.png')}}" class="d-block w-25" alt="polera-playholder">
+                    <img src="{{ asset('images/Amiguri.png')}}" class="d-block w-25" alt="amigurumi hongo">
+                    <img src="{{ asset('images/Falda.png')}}" class="d-block w-25" alt="Falda de lana">
                 </div>
             </div>
-            <div class="carousel-item active">
+            <div class="carousel-item">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ asset('images/Fiestas.png')}}" class="d-block w-25" alt="...">
-                    <img src="{{ asset('images/Gorro_extras.png')}}" class="d-block w-25" alt="...">
+                    <img src="{{ asset('images/Fiestas.png')}}" class="d-block w-25" alt="Fiesta de cumpleaños">
+                    <img src="{{ asset('images/Gorro_extras.png')}}" class="d-block w-25" alt="Gorro de lana">
                 </div>
             </div>
-            <div class="carousel-item active">
+            <div class="carousel-item">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ asset('images/Llaveros.png')}}" class="d-block w-25" alt="...">
-                    <img src="{{ asset('images/Sueter.png')}}" class="d-block w-25" alt="...">
+                    <img src="{{ asset('images/Llaveros.png')}}" class="d-block w-25" alt="Llaveros de lana">
+                    <img src="{{ asset('images/Sueter.png')}}" class="d-block w-25" alt="Sueter de lana">
                 </div>
             </div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#CarouselInicial" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#CarouselInicial" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
     <div class="container mt-5">   
         <h2 class="text-center mb-4">Nuestros Productos Destacados</h2>
@@ -40,9 +48,9 @@
                 <div class="card">
                     <img src="{{ asset('images/Amiguri.png')}}" class="card-img-top" alt="Producto 1">
                     <div class="card-body">
-                        <h5 class="card-title">Producto 1</h5>
-                        Descripcion del Producto 1
-                        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quod molestiae et. Et, provident excepturi.</p>
+                        <h5 class="card-title">Amigurumi Fungi</h5>
+                        Descripcion del Amigurumi del reino Fungi
+                        <p class="card-text">Este Amigurumi tejido con lana del reino Fungi, muy bueno para los joven y niños.</p>
                         <a href="#" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
@@ -51,9 +59,9 @@
                 <div class="card">
                     <img src="{{ asset('images/Falda.png')}}" class="card-img-top" alt="Producto 2">
                     <div class="card-body">
-                        <h5 class="card-title">Producto 2</h5>
-                        Descripcion del Producto 2
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam dolor laboriosam voluptatem eum, architecto deleniti.</p>
+                        <h5 class="card-title">Falda de lana</h5>
+                        Descripcion de la Falda de lana
+                        <p class="card-text">Esta falda muy comoda y tejida a mano para el uso de mujeres jovenes</p>
                         <a href="#" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
@@ -62,9 +70,9 @@
                 <div class="card">
                     <img src="{{ asset('images/amigurumi_2.png')}}" class="card-img-top" alt="Producto 3">
                     <div class="card-body">
-                        <h5 class="card-title">Producto 3</h5>
-                        Descripcion del Producto 3
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos ad reiciendis, aut pariatur molestias in.</p>
+                        <h5 class="card-title">Amigurumi de Baby Groot</h5>
+                        Descripcion del Amigurumi de Baby Groot
+                        <p class="card-text">Este amigurumi es muy inspirado del alien Groot, en especial en su versión "Baby", que sale en las pelicula de Marvel, en especial la saga de "Guardianes de la Galaxia"</p>
                         <a href="#" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>

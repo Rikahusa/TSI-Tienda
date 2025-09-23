@@ -20,15 +20,15 @@ Route::get('/', function () {
     return view('inicio.index');
 });
 
-Route::get('/Catalogo_Amigurumi', function () {
+Route::get('/Catalogo/Amigurumi', function () {
     return view('Catalogo_Amigu.index');
 });
 
-Route::get('/Catalogo_Fiestas', function () {
+Route::get('/Catalogo/Fiestas', function () {
     return view('Catalogo_Fiesta.index');
 });
 
-Route::get('/Catalogo_Vesti&Acceso', function () {
+Route::get('/Catalogo/Vesti&Acceso', function () {
     return view('Catalogo_Ves&Acce.index');
 });
 
