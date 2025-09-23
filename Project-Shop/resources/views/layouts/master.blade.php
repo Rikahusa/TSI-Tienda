@@ -8,7 +8,11 @@
 </head>
     <title>Document</title>
 </head>
-<body style="background-color: thistle">
+<body style="background-image: url('images/lanita.png'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            background-attachment: fixed;">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid justify-content-center">
             <a class="navbar-brand" href="#">Vivi Luna</a>
