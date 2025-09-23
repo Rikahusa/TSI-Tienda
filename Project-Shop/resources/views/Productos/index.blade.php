@@ -3,8 +3,8 @@
     <div class="container position-relative mt-4">
         <h1 class="text-center mb-4">Nuestros Productos en oferta para nuestros clientes registrados</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4 ">
+            <!-- Ofertas de productos destacados -->
             <div class="col">
-                <!--Ofertas-->
                 <img src="{{ asset('images/oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
                 <div class="card h-100">
                     <img src="{{ asset('images/Amiguri.png')}}" class="card-img-top" alt="Amigurumi">
@@ -18,7 +18,6 @@
                 </div>
             </div>
             <div class="col">
-                <!--Ofertas-->
                 <img src="{{ asset('images/oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
                 <div class="card h-100">
                     <img src="{{ asset('images/Sueter.png')}}" class="card-img-top" alt="Sueter de Lana">
@@ -32,7 +31,6 @@
                 </div>
             </div>
             <div class="col">
-                <!--Ofertas-->
                 <img src="{{ asset('images/oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
                 <div class="card h-100">
                     <img src="{{ asset('images/Fiestas.png')}}" class="card-img-top" alt="Fiestas">
