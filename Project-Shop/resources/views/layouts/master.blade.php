@@ -8,7 +8,7 @@
 </head>
     <title>Document</title>
 </head>
-<body style="background-image: url('images/lanita.png'); 
+<body style="background-image: url({{ asset('images/lanita.png')}}); 
             background-size: cover; 
             background-position: center; 
             background-repeat: no-repeat;
