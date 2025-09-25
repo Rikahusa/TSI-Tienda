@@ -11,7 +11,10 @@
                     <p class="card-text">Amigurumi del reino Fungi.</p>
                     <p class="card-text"><strong>Precio:</strong> $13990</p>
                     <a href="#" class="btn btn-primary">Detalles</a>
-                    <a href="#" class="btn btn-primary float-end">Agregar al Carrito</a>
+                    <form action="{{ route('carrito.agregar', '01') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-primary float-end">Agregar al Carrito</button>
+                    </form>
                 </div>
             </div>
         </div>
