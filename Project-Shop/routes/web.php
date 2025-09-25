@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController; //TESTEANDO
 use App\Http\Controllers\AuthController; //TESTEANDO
 
-
 Route::get('/login', function () {
     return view('login.index');
 })->name('login');
