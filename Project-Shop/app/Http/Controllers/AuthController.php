@@ -28,7 +28,7 @@ class AuthController extends Controller
             // Login exitoso - Crear sesión manualmente
             session(['usuario' => $usuario]);
             
-            return redirect()->intended('/inicio'); // Redirigir a página principal
+            return redirect()->intended('/  '); // Redirigir a página principal
         }
 
         // Login fallido

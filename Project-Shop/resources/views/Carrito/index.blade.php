@@ -12,7 +12,7 @@
                         <thead class="table-dark">
                             <tr>
                                 <th width="5%">N°</th>
-                                <th width="20%">Producto</th>
+                                <th width="35%">Producto</th>
                                 <th width="15%">Precio</th>
                                 <th width="10%">Cantidad</th>
                                 <th width="15%">Subtotal</th>
@@ -23,24 +23,9 @@
                             @foreach($itemsCarrito as $index => $item)
                             <tr>
                                 <td class="text-center">{{ $index + 1 }}</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{{ asset('images/Amiguri.png') }}" 
-                                             class="img-thumbnail me-3" 
-                                             style="width: 50px; height: 50px; object-fit: cover;"
-                                             alt="{{ $item->producto->Nombre_Producto }}">
-                                        <span>{{ $item->producto->Nombre_Producto }}</span>
-                                    </div>
-                                </td>
+                                <td>{{ $item->producto->Nombre_Producto }}</td>
                                 <td>${{ number_format($item->producto->Precio_Producto, 0, ',', '.') }}</td>
-                                <td class="text-center">
-                                    <div class="input-group input-group-sm" style="max-width: 120px;">
-                                        <button class="btn btn-outline-secondary" type="button">-</button>
-                                        <input type="number" class="form-control text-center" 
-                                               value="{{ $item->Cantidad_Item }}" min="1">
-                                        <button class="btn btn-outline-secondary" type="button">+</button>
-                                    </div>
-                                </td>
+                                <td class="text-center">{{ $item->Cantidad_Item }}</td>
                                 <td>${{ number_format($item->producto->Precio_Producto * $item->Cantidad_Item, 0, ',', '.') }}</td>
                                 <td class="text-center">
                                     <form action="{{ route('carrito.eliminar', $item->Id_Producto) }}" method="POST">
@@ -63,17 +48,14 @@
                         </tfoot>
                     </table>
                 </div>
-                
+
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ url('/catalogo/amigu') }}" class="btn btn-outline-primary">
-                        <span</span>Continuar Comprando
+                    <a href="{{ url('/productos') }}" class="btn btn-outline-primary">
+                        Continuar Comprando
                     </a>
                     <div>
-                        <button class="btn btn-warning me-2">
-                            <span </span>Actualizar Carrito
-                        </button>
                         <a href="#" class="btn btn-success">
-                            <span </span>Proceder al Pago
+                            Proceder al Pago
                         </a>
                     </div>
                 </div>

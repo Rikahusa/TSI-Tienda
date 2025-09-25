@@ -8,66 +8,80 @@ use App\Models\Producto;
 
 class CarritoController extends Controller
 {
-    public function agregar(Request $request, $idProducto)
+    /**
+     * Agregar producto al carrito
+     */
+    public function agregar(Request $request, $id)
     {
-        // Debug: ver qué llega
-        // dd($idProducto); // Descomenta temporalmente para ver el valor
-        
-        $rutUsuario = '999999999';
-        
-        // Verificar si el producto existe
+        // Convertir a string por seguridad
+        $idProducto = (string) $id;
+        $rutUsuario = '999999999'; // <- reemplaza por el rut real del usuario logueado
+
+        // Verificar que el producto exista
         $producto = Producto::find($idProducto);
-        
         if (!$producto) {
             return redirect()->back()->with('error', 'Producto no encontrado');
         }
-        
-        // Verificar si el producto ya está en el carrito
+
+        // Buscar si ya existe en el carrito
         $itemCarrito = Carrito::where('Rut_Usuario', $rutUsuario)
-                            ->where('Id_Producto', $idProducto)
-                            ->first();
-        
+            ->where('Id_Producto', $idProducto)
+            ->first();
+
         if ($itemCarrito) {
-            // Incrementar cantidad
-            $itemCarrito->update([
-                'Cantidad_Item' => $itemCarrito->Cantidad_Item + 1
-            ]);
+            // Incrementar cantidad usando update (no save)
+            Carrito::where('Rut_Usuario', $rutUsuario)
+                ->where('Id_Producto', $idProducto)
+                ->update([
+                    'Cantidad_Item' => $itemCarrito->Cantidad_Item + 1
+                ]);
         } else {
-            // Si no existe, crear nuevo item
+            // Crear nuevo registro
             Carrito::create([
-                'Rut_Usuario' => $rutUsuario,
-                'Id_Producto' => $idProducto,
-                'Cantidad_Item' => 1
+                'Rut_Usuario'  => $rutUsuario,
+                'Id_Producto'  => $idProducto,
+                'Cantidad_Item'=> 1
             ]);
         }
-        
-        return redirect()->route('carrito.mostrar')->with('success', 'Producto agregado al carrito');
+
+        return redirect()
+            ->route('carrito.mostrar')
+            ->with('success', 'Producto agregado al carrito');
     }
-    
+
+    /**
+     * Mostrar carrito de compras
+     */
     public function mostrar()
     {
-        $rutUsuario = '999999999';
-        
+        $rutUsuario = '999999999'; // <- reemplaza por el rut real del usuario logueado
+
         $itemsCarrito = Carrito::with('producto')
-                            ->where('Rut_Usuario', $rutUsuario)
-                            ->get();
-        
+            ->where('Rut_Usuario', $rutUsuario)
+            ->get();
+
         $total = 0;
         foreach ($itemsCarrito as $item) {
             $total += $item->producto->Precio_Producto * $item->Cantidad_Item;
         }
-        
+
         return view('Carrito.index', compact('itemsCarrito', 'total'));
     }
-    
-    public function eliminar($idProducto)
+
+    /**
+     * Eliminar un producto del carrito
+     */
+    public function eliminar($id)
     {
-        $rutUsuario = '999999999';
-        
+        $rutUsuario = '999999999'; // <- reemplaza por el rut real del usuario logueado
+        $idProducto = (string) $id;
+
         Carrito::where('Rut_Usuario', $rutUsuario)
-                ->where('Id_Producto', $idProducto)
-                ->delete();
-        
-        return redirect()->route('carrito.mostrar')->with('success', 'Producto eliminado del carrito');
+            ->where('Id_Producto', $idProducto)
+            ->delete();
+
+        return redirect()
+            ->route('carrito.mostrar')
+            ->with('success', 'Producto eliminado del carrito');
     }
 }

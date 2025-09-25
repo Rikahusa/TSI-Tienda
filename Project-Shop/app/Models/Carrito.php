@@ -10,9 +10,13 @@ class Carrito extends Model
     use HasFactory;
 
     protected $table = 'carritos';
-    
-    // Clave primaria compuesta
-    protected $primaryKey = ['Rut_Usuario', 'Id_Producto'];
+
+    /**
+     * ⚠️ Importante:
+     * La tabla no tiene una clave primaria numérica, 
+     * por eso desactivamos la PK e incrementing.
+     */
+    protected $primaryKey = null;
     public $incrementing = false;
     public $timestamps = true;
 
@@ -47,27 +51,8 @@ class Carrito extends Model
      */
     public function getSubtotalAttribute()
     {
-        return $this->producto ? $this->producto->Precio_Producto * $this->Cantidad_Item : 0;
-    }
-
-    /**
-     * Incrementar cantidad
-     */
-    public function incrementarCantidad($cantidad = 1)
-    {
-        $this->update(['Cantidad_Item' => $this->Cantidad_Item + $cantidad]);
-    }
-
-    /**
-     * Decrementar cantidad
-     */
-    public function decrementarCantidad($cantidad = 1)
-    {
-        $nuevaCantidad = max(0, $this->Cantidad_Item - $cantidad);
-        if ($nuevaCantidad === 0) {
-            $this->delete();
-        } else {
-            $this->update(['Cantidad_Item' => $nuevaCantidad]);
-        }
+        return $this->producto
+            ? $this->producto->Precio_Producto * $this->Cantidad_Item
+            : 0;
     }
 }
