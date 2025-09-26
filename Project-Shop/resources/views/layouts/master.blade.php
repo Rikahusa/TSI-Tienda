@@ -47,11 +47,22 @@
                             Carrito
                         </a>
                     </li>
+
+                    <!-- ✅ Nuevo enlace a Ajuste de Stock -->
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-1" href="{{ route('ajustes.index') }}">
+                            <span class="material-symbols-outlined">inventory</span>
+                            Ajuste de Stock
+                        </a>
+                    </li>
+                    <!-- ✅ Fin del nuevo enlace -->
                 </ul>
             </div>
         </div>
     </nav>
+
     @yield('contenido-principal')
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

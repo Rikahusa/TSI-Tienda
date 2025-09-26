@@ -11,42 +11,40 @@ class UsuarioController extends Controller
     // Mostrar formulario de registro
     public function create()
     {
-        return view('registro.index'); // Asegúrate de que esta vista existe
+        return view('registro.index');
     }
 
-    // Procesar el formulario de registro
+    // Procesar formulario de registro
     public function store(Request $request)
     {
-        // Validación de datos
         $request->validate([
-            'nuevoRut' => 'required|string|max:10|unique:_usuarios,Rut_Usuario',
-            'nombre' => 'required|string|max:30',
-            'apellido' => 'required|string|max:30',
-            'direccion' => 'required|string|max:30',
-            'correo' => 'required|email|max:30|unique:_usuarios,Correo_Usuario',
-            'telefono' => 'required|string|max:12',
-            'nuevaContraseña' => 'required|string|min:6|max:30',
-            'rol' => 'required|in:Admin,Usuario,Empleado'
+            'nuevoRut'       => 'required|string|max:10|unique:usuarios,rut_usuario',
+            'nombre'         => 'required|string|max:30',
+            'apellido'       => 'required|string|max:30',
+            'direccion'      => 'required|string|max:50',
+            'correo'         => 'required|email|max:30|unique:usuarios,correo_usuario',
+            'telefono'       => 'required|string|max:12',
+            'nuevaContraseña'=> 'required|string|min:6|max:30',
+            'rol'            => 'required|in:Admin,Usuario,Empleado'
         ]);
 
-        // Mapear el valor del rol al formato de la base de datos
-        $tipoUsuario = 'U'; // Por defecto Usuario
-        if ($request->rol == 'Admin') {
-            $tipoUsuario = 'A';
-        } elseif ($request->rol == 'Empleado') {
-            $tipoUsuario = 'E';
-        }
+        // Mapear el valor del rol
+        $tipoUsuario = match ($request->rol) {
+            'Admin'    => 'A',
+            'Empleado' => 'E',
+            default    => 'U',
+        };
 
         // Crear el usuario
         Usuario::create([
-            'Rut_Usuario' => $request->nuevoRut,
-            'Nombre_Usuario' => $request->nombre,
-            'Apellido_Usuario' => $request->apellido,
-            'Dirección_Usuario' => $request->direccion,
-            'Correo_Usuario' => $request->correo,
-            'Teléfono_Usuario' => $request->telefono,
-            'Pass_Usuario' => Hash::make($request->nuevaContraseña), // Encriptar contraseña
-            'Tipo_Usuario' => $tipoUsuario
+            'rut_usuario'    => $request->nuevoRut,
+            'nombre_usuario' => $request->nombre,
+            'apellido_usuario'=> $request->apellido,
+            'direccion_usuario'=> $request->direccion,
+            'correo_usuario'  => $request->correo,
+            'telefono_usuario'=> $request->telefono,
+            'pass_usuario'    => Hash::make($request->nuevaContraseña),
+            'tipo_usuario'    => $tipoUsuario
         ]);
 
         return redirect()->back()->with('success', 'Usuario registrado exitosamente!');

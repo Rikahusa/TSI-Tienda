@@ -9,50 +9,46 @@ class Carrito extends Model
 {
     use HasFactory;
 
-    protected $table = 'carritos';
+    // ✅ Nombre exacto de la tabla (minúsculas)
+    protected $table = 'carrito';
 
-    /**
-     * ⚠️ Importante:
-     * La tabla no tiene una clave primaria numérica, 
-     * por eso desactivamos la PK e incrementing.
-     */
+    // ⚠️ La PK es compuesta (rut_usuario + id_producto), Laravel no la maneja nativamente
     protected $primaryKey = null;
     public $incrementing = false;
-    public $timestamps = true;
 
+    // ✅ No usamos created_at / updated_at
+    public $timestamps = false;
+
+    // ✅ Campos permitidos para asignación masiva
     protected $fillable = [
-        'Rut_Usuario',
-        'Id_Producto',
-        'Cantidad_Item'
+        'rut_usuario',
+        'id_producto',
+        'cantidad_item'
     ];
 
+    // ✅ Casting para que cantidad sea int
     protected $casts = [
-        'Cantidad_Item' => 'integer'
+        'cantidad_item' => 'integer'
     ];
 
-    /**
-     * Relación: Un item del carrito pertenece a un usuario
-     */
+    // 🔗 Relaciones
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'Rut_Usuario', 'Rut_Usuario');
+        // FK rut_usuario → usuarios.rut_usuario
+        return $this->belongsTo(Usuario::class, 'rut_usuario', 'rut_usuario');
     }
 
-    /**
-     * Relación: Un item del carrito pertenece a un producto
-     */
     public function producto()
     {
-        return $this->belongsTo(Producto::class, 'Id_Producto', 'Id_Producto');
+        // FK id_producto → productos.id_producto
+        return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');
     }
 
-    /**
-     * Calcular subtotal del item
-     */
+    // ✅ Subtotal calculado
     public function getSubtotalAttribute()
     {
         return $this->producto
-            ? $this->producto->Precio_Producto * $this->Cantidad_Item
+            ? $this->producto->precio_producto * $this->cantidad_item
             : 0;
     }
 }

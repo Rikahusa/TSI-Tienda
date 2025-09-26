@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categorias', function (Blueprint $table) {
-            $table->char('Id_Categoria', 2)->primary(); // PK char(2)
-            $table->string('Nombre_Categoria', 30); // varchar(30)
-            $table->char('Estado_Categoria', 1)->default('A'); // char(1) - A=Activo, I=Inactivo
-            $table->timestamps(); // created_at y updated_at
+            $table->char('id_categoria', 2)->primary();           // PK: char(2)
+            $table->string('nombre_categoria', 30);               // varchar(30)
+            $table->char('estado_categoria', 1);                  // char(1) - A=Activo, I=Inactivo
+
+            // Si no necesitas timestamps según el informe, puedes comentarlos:
+            // $table->timestamps();
         });
     }
 

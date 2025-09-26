@@ -1,12 +1,12 @@
 @extends('layouts.master')
+
 @section('contenido-principal')
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Catálogo de Vestimentas y Accesorios</h1>
+    <h1 class="text-center mb-4">Catálogo de Amigurumis</h1>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
-
         {{-- ✅ Productos dinámicos (de la base de datos) --}}
-        @foreach($productos as $producto)
+        @forelse($productos as $producto)
             <div class="col">
                 <div class="card h-100">
                     <img src="{{ asset('images/' . $producto->imagen_producto) }}"
@@ -16,9 +16,11 @@
                         <h5 class="card-title">{{ $producto->nombre_producto }}</h5>
                         <p class="card-text">{{ $producto->descripcion_producto }}</p>
                         <p class="card-text">
-                            <strong>Precio:</strong> ${{ number_format($producto->precio_producto, 0, ',', '.') }}
+                            <strong>Precio:</strong>
+                            ${{ number_format($producto->precio_producto, 0, ',', '.') }}
                         </p>
 
+                        {{-- Botón para agregar al carrito --}}
                         <form action="{{ route('carrito.agregar', $producto->id_producto) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-primary w-100">
@@ -28,8 +30,9 @@
                     </div>
                 </div>
             </div>
-        @endforeach
-
+        @empty
+            <p class="text-center">No hay productos disponibles en esta categoría.</p>
+        @endforelse
     </div>
 </div>
 

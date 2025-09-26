@@ -3,35 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Usuario;
 
 class AuthController extends Controller
 {
-    
-
     // Procesar el login
     public function login(Request $request)
     {
-        // Validación
         $request->validate([
-            'Rut' => 'required|string|max:10',
+            'Rut'      => 'required|string|max:10',
             'password' => 'required|string'
         ]);
 
-        // Buscar usuario por RUT
-        $usuario = Usuario::where('Rut_Usuario', $request->Rut)->first();
+        // Buscar usuario por rut_usuario (minúscula)
+        $usuario = Usuario::where('rut_usuario', $request->Rut)->first();
 
         // Verificar si existe y la contraseña coincide
-        if ($usuario && Hash::check($request->password, $usuario->Pass_Usuario)) {
-            // Login exitoso - Crear sesión manualmente
-            session(['usuario' => $usuario]);
-            
-            return redirect()->intended('/  '); // Redirigir a página principal
+        if ($usuario && Hash::check($request->password, $usuario->pass_usuario)) {
+            session(['usuario' => $usuario]); // ✅ sesión manual
+            return redirect()->intended('/'); // Redirigir a inicio
         }
 
-        // Login fallido
         return back()->withErrors([
             'login' => 'RUT o contraseña incorrectos.',
         ])->withInput();

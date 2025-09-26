@@ -13,9 +13,8 @@ class CarritoController extends Controller
      */
     public function agregar(Request $request, $id)
     {
-        // Convertir a string por seguridad
         $idProducto = (string) $id;
-        $rutUsuario = '999999999'; // <- reemplaza por el rut real del usuario logueado
+        $rutUsuario = session('usuario')->rut_usuario; // ✅ usuario logueado
 
         // Verificar que el producto exista
         $producto = Producto::find($idProducto);
@@ -24,29 +23,27 @@ class CarritoController extends Controller
         }
 
         // Buscar si ya existe en el carrito
-        $itemCarrito = Carrito::where('Rut_Usuario', $rutUsuario)
-            ->where('Id_Producto', $idProducto)
+        $itemCarrito = Carrito::where('rut_usuario', $rutUsuario)
+            ->where('id_producto', $idProducto)
             ->first();
 
         if ($itemCarrito) {
-            // Incrementar cantidad usando update (no save)
-            Carrito::where('Rut_Usuario', $rutUsuario)
-                ->where('Id_Producto', $idProducto)
-                ->update([
-                    'Cantidad_Item' => $itemCarrito->Cantidad_Item + 1
-                ]);
+            // Incrementar cantidad
+            $itemCarrito->update([
+                'cantidad_item' => $itemCarrito->cantidad_item + 1
+            ]);
         } else {
             // Crear nuevo registro
             Carrito::create([
-                'Rut_Usuario'  => $rutUsuario,
-                'Id_Producto'  => $idProducto,
-                'Cantidad_Item'=> 1
+                'rut_usuario'   => $rutUsuario,
+                'id_producto'   => $idProducto,
+                'cantidad_item' => 1
             ]);
         }
 
         return redirect()
             ->route('carrito.mostrar')
-            ->with('success', 'Producto agregado al carrito');
+            ->with('success', '✅ Producto agregado al carrito');
     }
 
     /**
@@ -54,16 +51,16 @@ class CarritoController extends Controller
      */
     public function mostrar()
     {
-        $rutUsuario = '999999999'; // <- reemplaza por el rut real del usuario logueado
+        $rutUsuario = session('usuario')->rut_usuario; // ✅ usuario logueado
 
         $itemsCarrito = Carrito::with('producto')
-            ->where('Rut_Usuario', $rutUsuario)
+            ->where('rut_usuario', $rutUsuario)
             ->get();
 
-        $total = 0;
-        foreach ($itemsCarrito as $item) {
-            $total += $item->producto->Precio_Producto * $item->Cantidad_Item;
-        }
+        // Calcular total
+        $total = $itemsCarrito->sum(function ($item) {
+            return $item->producto->precio_producto * $item->cantidad_item;
+        });
 
         return view('Carrito.index', compact('itemsCarrito', 'total'));
     }
@@ -73,15 +70,15 @@ class CarritoController extends Controller
      */
     public function eliminar($id)
     {
-        $rutUsuario = '999999999'; // <- reemplaza por el rut real del usuario logueado
+        $rutUsuario = session('usuario')->rut_usuario; // ✅ usuario logueado
         $idProducto = (string) $id;
 
-        Carrito::where('Rut_Usuario', $rutUsuario)
-            ->where('Id_Producto', $idProducto)
+        Carrito::where('rut_usuario', $rutUsuario)
+            ->where('id_producto', $idProducto)
             ->delete();
 
         return redirect()
             ->route('carrito.mostrar')
-            ->with('success', 'Producto eliminado del carrito');
+            ->with('success', '🗑️ Producto eliminado del carrito');
     }
 }
