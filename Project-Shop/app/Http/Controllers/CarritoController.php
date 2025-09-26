@@ -9,55 +9,22 @@ use App\Models\Producto;
 class CarritoController extends Controller
 {
     /**
-     * Agregar producto al carrito
-     */
-    public function agregar(Request $request, $id)
-    {
-        $idProducto = (string) $id;
-        $rutUsuario = session('usuario')->rut_usuario; // ✅ usuario logueado
-
-        // Verificar que el producto exista
-        $producto = Producto::find($idProducto);
-        if (!$producto) {
-            return redirect()->back()->with('error', 'Producto no encontrado');
-        }
-
-        // Buscar si ya existe en el carrito
-        $itemCarrito = Carrito::where('rut_usuario', $rutUsuario)
-            ->where('id_producto', $idProducto)
-            ->first();
-
-        if ($itemCarrito) {
-            // Incrementar cantidad
-            $itemCarrito->update([
-                'cantidad_item' => $itemCarrito->cantidad_item + 1
-            ]);
-        } else {
-            // Crear nuevo registro
-            Carrito::create([
-                'rut_usuario'   => $rutUsuario,
-                'id_producto'   => $idProducto,
-                'cantidad_item' => 1
-            ]);
-        }
-
-        return redirect()
-            ->route('carrito.mostrar')
-            ->with('success', '✅ Producto agregado al carrito');
-    }
-
-    /**
-     * Mostrar carrito de compras
+     * 👉 Mostrar el carrito del usuario logueado
      */
     public function mostrar()
     {
-        $rutUsuario = session('usuario')->rut_usuario; // ✅ usuario logueado
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
+        }
 
-        $itemsCarrito = Carrito::with('producto')
-            ->where('rut_usuario', $rutUsuario)
+        $rut = $usuario->rut_usuario;
+
+        // ✅ Traer solo los productos de este usuario
+        $itemsCarrito = Carrito::where('rut_usuario', $rut)
+            ->with('producto')
             ->get();
 
-        // Calcular total
         $total = $itemsCarrito->sum(function ($item) {
             return $item->producto->precio_producto * $item->cantidad_item;
         });
@@ -66,19 +33,59 @@ class CarritoController extends Controller
     }
 
     /**
-     * Eliminar un producto del carrito
+     * 👉 Agregar un producto al carrito
+     */
+    public function agregar($id)
+    {
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
+        }
+
+        $rut = $usuario->rut_usuario;
+        $producto = Producto::findOrFail($id);
+
+        // ✅ Buscar SOLO este producto de este usuario
+        $item = Carrito::where('rut_usuario', $rut)
+                       ->where('id_producto', $producto->id_producto)
+                       ->first();
+
+        if ($item) {
+            // ✅ Incrementar solo este registro (UPDATE explícito)
+            Carrito::where('rut_usuario', $rut)
+                   ->where('id_producto', $producto->id_producto)
+                   ->update([
+                       'cantidad_item' => $item->cantidad_item + 1
+                   ]);
+        } else {
+            // ✅ Crear un nuevo registro solo para este producto
+            Carrito::create([
+                'rut_usuario'   => $rut,
+                'id_producto'   => $producto->id_producto,
+                'cantidad_item' => 1,
+            ]);
+        }
+
+        return redirect()->route('carrito.mostrar');
+    }
+
+    /**
+     * 👉 Eliminar un producto específico del carrito
      */
     public function eliminar($id)
     {
-        $rutUsuario = session('usuario')->rut_usuario; // ✅ usuario logueado
-        $idProducto = (string) $id;
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
+        }
 
-        Carrito::where('rut_usuario', $rutUsuario)
-            ->where('id_producto', $idProducto)
-            ->delete();
+        $rut = $usuario->rut_usuario;
 
-        return redirect()
-            ->route('carrito.mostrar')
-            ->with('success', '🗑️ Producto eliminado del carrito');
+        // ✅ Solo elimina el producto indicado del usuario logueado
+        Carrito::where('rut_usuario', $rut)
+               ->where('id_producto', $id)
+               ->delete();
+
+        return redirect()->route('carrito.mostrar');
     }
 }
