@@ -13,12 +13,12 @@ class CarritoController extends Controller
      */
     public function mostrar()
     {
-        $usuario = session('usuario');
-        if (!$usuario) {
+        if (!session()->has('usuario')) {
             return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
         }
 
-        $rut = $usuario->rut_usuario;
+        // Tomar el rut directamente desde la sesión (array)
+        $rut = session('usuario.rut_usuario');
 
         //  Traer solo los productos de este usuario
         $itemsCarrito = Carrito::where('rut_usuario', $rut)
@@ -37,12 +37,11 @@ class CarritoController extends Controller
      */
     public function agregar($id)
     {
-        $usuario = session('usuario');
-        if (!$usuario) {
+        if (!session()->has('usuario')) {
             return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
         }
 
-        $rut = $usuario->rut_usuario;
+        $rut = session('usuario.rut_usuario');
         $producto = Producto::findOrFail($id);
 
         //  Buscar SOLO este producto de este usuario
@@ -74,12 +73,11 @@ class CarritoController extends Controller
      */
     public function eliminar($id)
     {
-        $usuario = session('usuario');
-        if (!$usuario) {
+        if (!session()->has('usuario')) {
             return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
         }
 
-        $rut = $usuario->rut_usuario;
+        $rut = session('usuario.rut_usuario');
 
         //  Solo elimina el producto indicado del usuario logueado
         Carrito::where('rut_usuario', $rut)

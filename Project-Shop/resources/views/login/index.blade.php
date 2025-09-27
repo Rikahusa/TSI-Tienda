@@ -51,7 +51,7 @@
                             
                             <div class="mb-3">
                                 <label for="Rut" class="form-label">RUT Usuario</label>
-                                <input type="text" class="form-control" id="Rut" name="Rut" value="{{ old('Rut') }}" required maxlength="10">
+                                <input type="text" class="form-control" id="Rut" name="Rut" value="{{ old('Rut') }}" required maxlength="9">
                             </div>
 
                             <div class="mb-3">

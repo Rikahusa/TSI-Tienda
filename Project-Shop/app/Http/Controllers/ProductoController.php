@@ -26,28 +26,28 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre_producto'     => 'required|string|max:100|unique:productos,nombre_producto',
-            'precio_producto'     => 'required|integer|min:0',
-            'stock_real'          => 'required|integer|min:0',
-            'id_categoria'        => 'required|integer|exists:categorias,id_categoria',
-            'descripcion_producto'=> 'required|string|max:500'
+            'nombre_producto'      => 'required|string|max:100|unique:productos,nombre_producto',
+            'precio_producto'      => 'required|integer|min:0',
+            'stock_real'           => 'required|integer|min:0',
+            'id_categoria'         => 'required|integer|exists:categorias,id_categoria',
+            'descripcion_producto' => 'required|string|max:500'
         ]);
 
         // ✅ Crear el producto
         $producto = Producto::create([
-            'nombre_producto'     => $request->nombre_producto,
-            'precio_producto'     => $request->precio_producto,
-            'stock_real'          => $request->stock_real,
-            'id_categoria'        => $request->id_categoria,
-            'descripcion_producto'=> $request->descripcion_producto,
-            'estado_producto'     => 'A' // activo por defecto
+            'nombre_producto'      => $request->nombre_producto,
+            'precio_producto'      => $request->precio_producto,
+            'stock_real'           => $request->stock_real,
+            'id_categoria'         => $request->id_categoria,
+            'descripcion_producto' => $request->descripcion_producto,
+            'estado_producto'      => 'A' // activo por defecto
         ]);
 
         // ✅ Registrar ajuste de stock inicial
         if (session()->has('usuario')) {
             AjusteStock::create([
                 'id_producto'        => $producto->id_producto,
-                'rut_usuario'        => session('usuario')->rut_usuario, // ✅ sesión manual
+                'rut_usuario'        => session('usuario')['rut_usuario'], // ✅ ACCESO COMO ARRAY
                 'cantidad_ajuste'    => $producto->stock_real,
                 'descripcion_ajuste' => 'Stock inicial',
                 'fecha_modificacion' => now(),
@@ -66,29 +66,29 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
 
         $request->validate([
-            'nombre_producto'     => 'required|string|max:100|unique:productos,nombre_producto,' . $producto->id_producto . ',id_producto',
-            'precio_producto'     => 'required|integer|min:0',
-            'stock_real'          => 'required|integer|min:0',
-            'id_categoria'        => 'required|integer|exists:categorias,id_categoria',
-            'descripcion_producto'=> 'required|string|max:500'
+            'nombre_producto'      => 'required|string|max:100|unique:productos,nombre_producto,' . $producto->id_producto . ',id_producto',
+            'precio_producto'      => 'required|integer|min:0',
+            'stock_real'           => 'required|integer|min:0',
+            'id_categoria'         => 'required|integer|exists:categorias,id_categoria',
+            'descripcion_producto' => 'required|string|max:500'
         ]);
 
         $stockAnterior = $producto->stock_real;
 
         // ✅ Actualizar producto
         $producto->update([
-            'nombre_producto'     => $request->nombre_producto,
-            'precio_producto'     => $request->precio_producto,
-            'stock_real'          => $request->stock_real,
-            'id_categoria'        => $request->id_categoria,
-            'descripcion_producto'=> $request->descripcion_producto
+            'nombre_producto'      => $request->nombre_producto,
+            'precio_producto'      => $request->precio_producto,
+            'stock_real'           => $request->stock_real,
+            'id_categoria'         => $request->id_categoria,
+            'descripcion_producto' => $request->descripcion_producto
         ]);
 
         // ✅ Registrar ajuste solo si cambia el stock
         if ($stockAnterior != $request->stock_real && session()->has('usuario')) {
             AjusteStock::create([
                 'id_producto'        => $producto->id_producto,
-                'rut_usuario'        => session('usuario')->rut_usuario,
+                'rut_usuario'        => session('usuario')['rut_usuario'], // ✅ ACCESO COMO ARRAY
                 'cantidad_ajuste'    => $request->stock_real - $stockAnterior,
                 'descripcion_ajuste' => 'Edición de producto (ajuste de stock)',
                 'fecha_modificacion' => now(),

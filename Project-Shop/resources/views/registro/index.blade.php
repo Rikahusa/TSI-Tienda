@@ -78,38 +78,53 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="nombre" class="form-label">Nombre</label>
-                                            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
+                                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="30" value="{{ old('nombre') }}" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="apellido" class="form-label">Apellido</label>
-                                            <input type="text" class="form-control" id="apellido" name="apellido" value="{{ old('apellido') }}" required>
+                                            <input type="text" class="form-control" id="apellido" name="apellido" maxlength="30" value="{{ old('apellido') }}" required>
                                         </div>
                                     </div>
                                     
                                     <div class="mb-3">
                                         <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" name="direccion" value="{{ old('direccion') }}" required>
+                                        <input type="text" class="form-control" id="direccion" name="direccion" maxlength="50" value="{{ old('direccion') }}" required>
                                     </div>
                                     
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="correo" class="form-label">Correo electrónico</label>
-                                            <input type="email" class="form-control" id="correo" name="correo" value="{{ old('correo') }}" required>
+                                            <input type="email" class="form-control" id="correo" name="correo" placeholder="ejemplo@gmail.com" maxlength="30" value="{{ old('correo') }}" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="telefono" class="form-label">Teléfono</label>
-                                            <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ old('telefono') }}" required>
+                                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+56912345678" maxlength="12" value="{{ old('telefono') }}" required>
                                         </div>
+                                        <script>
+                                            document.getElementById("telefono").addEventListener("blur", function() {
+                                                let valor = this.value.trim();
+
+                                                // Si empieza con 9 y tiene 9 dígitos se le agregara el prefijo +56
+                                                if (/^9\d{8}$/.test(valor)) {
+                                                    this.value = "+56" + valor;
+                                                }
+                                                
+                                                // Si empieza con 56 sin el + → agregar el +
+                                                else if (/^56\d{9}$/.test(valor)) {
+                                                    this.value = "+" + valor;
+                                                }
+                                            });
+                                        </script>
                                     </div>
                                     
                                     <div class="mb-3">
                                         <label for="nuevoRut" class="form-label">Rut Usuario</label>
-                                        <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" value="{{ old('nuevoRut') }}" required>
+                                        <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" placeholder="Ej: 123456789K" pattern="^[0-9]{7,8}[0-9Kk]{1}$" title="Ingrese el RUT sin puntos ni guión. Ejemplo: 123456789K" value="{{ old('nuevoRut') }}" maxlength="9" required>
                                     </div>
                                     
                                     <div class="mb-3">
                                         <label for="nuevaContraseña" class="form-label">Contraseña</label>
-                                        <input type="password" class="form-control" name="nuevaContraseña" id="nuevaContraseña" required>
+                                        <input type="password" class="form-control" name="nuevaContraseña" id="nuevaContraseña" maxlength="30" required>
                                     </div>
                                     
                                     <div class="mb-3">
@@ -124,16 +139,11 @@
                                                 @if(old('rol') == 'Usuario' || empty(old('rol'))) checked @endif>
                                             <label class="form-check-label" for="flexRadioDefault2">Usuario</label>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="rol" id="flexRadioDefault3" value="Empleado" 
-                                                @if(old('rol') == 'Empleado') checked @endif>
-                                            <label class="form-check-label" for="flexRadioDefault3">Empleado</label>
-                                        </div>
                                     </div>
                                     
                                     <div class="d-grid gap-2 d-md-flex">
                                         <button type="submit" class="btn btn-success me-md-2 flex-fill">Registrarse</button>
-                                        <a href="{{ url('/') }}" class="btn btn-outline-secondary flex-fill">Volver al inicio</a>
+                                        <a href="{{ url('/login') }}" class="btn btn-outline-secondary flex-fill">Volver al login</a>
                                     </div>
                                 </form>
                             </div>
@@ -145,4 +155,4 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-</html>
+</html> 
