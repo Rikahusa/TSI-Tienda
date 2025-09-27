@@ -5,12 +5,24 @@
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h1 class="card-title mb-0">Ajuste de Productos</h1>
-            <!-- Botón para agregar -->
             <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregar">
                 + Agregar Producto
             </button>
         </div>
         <div class="card-body">
+
+            {{-- 🔴 MENSAJES DE ERROR GLOBALES --}}
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             @if($productos->count() > 0)
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover">
@@ -40,15 +52,11 @@
                             </td>
                             <td>{{ $producto->descripcion_producto }}</td>
                             <td class="text-center">
-                                <!-- Editar -->
                                 <button class="btn btn-sm btn-warning"
-                                        type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalEditar{{ $producto->id_producto }}">
                                     Editar
                                 </button>
-
-                                <!-- Eliminar -->
                                 <form action="{{ route('ajustes.eliminar', $producto->id_producto) }}"
                                       method="POST" style="display:inline;">
                                     @csrf
@@ -61,57 +69,6 @@
                                 </form>
                             </td>
                         </tr>
-
-                        <!-- MODAL EDITAR -->
-                        <div class="modal fade" id="modalEditar{{ $producto->id_producto }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <form class="modal-content" method="POST"
-                                      action="{{ route('ajustes.actualizar', $producto->id_producto) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="modal-header bg-warning">
-                                        <h5 class="modal-title">Editar Producto</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label>Nombre</label>
-                                            <input type="text" name="nombre_producto" class="form-control"
-                                                   value="{{ $producto->nombre_producto }}" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Precio</label>
-                                            <input type="number" name="precio_producto" class="form-control"
-                                                   value="{{ $producto->precio_producto }}" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Stock</label>
-                                            <input type="number" name="stock_real" class="form-control"
-                                                   value="{{ $producto->stock_real }}" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Categoría</label>
-                                            <select name="id_categoria" class="form-control" required>
-                                                @foreach($categorias as $cat)
-                                                    <option value="{{ $cat->id_categoria }}"
-                                                        {{ $producto->id_categoria == $cat->id_categoria ? 'selected' : '' }}>
-                                                        {{ $cat->nombre_categoria }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Descripción</label>
-                                            <textarea name="descripcion_producto" class="form-control" required>{{ $producto->descripcion_producto }}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-warning">Guardar Cambios</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -125,7 +82,60 @@
     </div>
 </div>
 
-<!-- MODAL AGREGAR -->
+<!-- 🔵 MODALES DE EDICIÓN -->
+@foreach($productos as $producto)
+<div class="modal fade" id="modalEditar{{ $producto->id_producto }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" method="POST"
+              action="{{ route('ajustes.actualizar', $producto->id_producto) }}">
+            @csrf
+            @method('PUT')
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title">Editar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre_producto" class="form-control"
+                           value="{{ $producto->nombre_producto }}" required>
+                </div>
+                <div class="mb-3">
+                    <label>Precio</label>
+                    <input type="number" name="precio_producto" class="form-control"
+                           value="{{ $producto->precio_producto }}" required>
+                </div>
+                <div class="mb-3">
+                    <label>Stock</label>
+                    <input type="number" name="stock_real" class="form-control"
+                           value="{{ $producto->stock_real }}" required>
+                </div>
+                <div class="mb-3">
+                    <label>Categoría</label>
+                    <select name="id_categoria" class="form-control" required>
+                        @foreach($categorias as $cat)
+                            <option value="{{ $cat->id_categoria }}"
+                                {{ $producto->id_categoria == $cat->id_categoria ? 'selected' : '' }}>
+                                {{ $cat->nombre_categoria }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label>Descripción</label>
+                    <textarea name="descripcion_producto" class="form-control" required>{{ $producto->descripcion_producto }}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-warning">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
+<!-- 🔵 MODAL AGREGAR -->
 <div class="modal fade" id="modalAgregar" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form class="modal-content" method="POST" action="{{ route('ajustes.guardar') }}">
@@ -137,21 +147,25 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label>Nombre</label>
-                    <input type="text" name="nombre_producto" class="form-control" required>
+                    <input type="text" name="nombre_producto" class="form-control"
+                           value="{{ old('nombre_producto') }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Precio</label>
-                    <input type="number" name="precio_producto" class="form-control" required>
+                    <input type="number" name="precio_producto" class="form-control"
+                           value="{{ old('precio_producto') }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Stock</label>
-                    <input type="number" name="stock_real" class="form-control" required>
+                    <input type="number" name="stock_real" class="form-control"
+                           value="{{ old('stock_real') }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Categoría</label>
                     <select name="id_categoria" class="form-control" required>
                         @foreach($categorias as $cat)
-                            <option value="{{ $cat->id_categoria }}">
+                            <option value="{{ $cat->id_categoria }}"
+                                {{ old('id_categoria') == $cat->id_categoria ? 'selected' : '' }}>
                                 {{ $cat->nombre_categoria }}
                             </option>
                         @endforeach
@@ -159,7 +173,7 @@
                 </div>
                 <div class="mb-3">
                     <label>Descripción</label>
-                    <textarea name="descripcion_producto" class="form-control" required></textarea>
+                    <textarea name="descripcion_producto" class="form-control" required>{{ old('descripcion_producto') }}</textarea>
                 </div>
             </div>
             <div class="modal-footer">

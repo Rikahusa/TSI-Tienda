@@ -20,7 +20,7 @@ class CarritoController extends Controller
 
         $rut = $usuario->rut_usuario;
 
-        // ✅ Traer solo los productos de este usuario
+        //  Traer solo los productos de este usuario
         $itemsCarrito = Carrito::where('rut_usuario', $rut)
             ->with('producto')
             ->get();
@@ -33,7 +33,7 @@ class CarritoController extends Controller
     }
 
     /**
-     * 👉 Agregar un producto al carrito
+     *  Agregar un producto al carrito
      */
     public function agregar($id)
     {
@@ -45,20 +45,20 @@ class CarritoController extends Controller
         $rut = $usuario->rut_usuario;
         $producto = Producto::findOrFail($id);
 
-        // ✅ Buscar SOLO este producto de este usuario
+        //  Buscar SOLO este producto de este usuario
         $item = Carrito::where('rut_usuario', $rut)
                        ->where('id_producto', $producto->id_producto)
                        ->first();
 
         if ($item) {
-            // ✅ Incrementar solo este registro (UPDATE explícito)
+            //  Incrementar solo este registro (UPDATE explícito)
             Carrito::where('rut_usuario', $rut)
                    ->where('id_producto', $producto->id_producto)
                    ->update([
                        'cantidad_item' => $item->cantidad_item + 1
                    ]);
         } else {
-            // ✅ Crear un nuevo registro solo para este producto
+            //  Crear un nuevo registro solo para este producto
             Carrito::create([
                 'rut_usuario'   => $rut,
                 'id_producto'   => $producto->id_producto,
@@ -70,7 +70,7 @@ class CarritoController extends Controller
     }
 
     /**
-     * 👉 Eliminar un producto específico del carrito
+     *  Eliminar un producto específico del carrito
      */
     public function eliminar($id)
     {
@@ -81,7 +81,7 @@ class CarritoController extends Controller
 
         $rut = $usuario->rut_usuario;
 
-        // ✅ Solo elimina el producto indicado del usuario logueado
+        //  Solo elimina el producto indicado del usuario logueado
         Carrito::where('rut_usuario', $rut)
                ->where('id_producto', $id)
                ->delete();

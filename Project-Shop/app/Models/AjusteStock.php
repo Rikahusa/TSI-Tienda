@@ -9,29 +9,29 @@ class AjusteStock extends Model
 {
     use HasFactory;
 
-    protected $table = 'ajuste_stock';     // Nombre exacto de la tabla
-    protected $primaryKey = 'Id_Stock';    // Clave primaria
-    public $incrementing = false;          // Char(2) no es autoincrement
-    protected $keyType = 'string';         // Tipo string
+    // ✅ Nombre real de la tabla
+    protected $table = 'ajustes';
+    protected $primaryKey = 'id_stock';
+    public $incrementing = true;
+    protected $keyType = 'int';
+    public $timestamps = false; // usamos timestamp manual
 
     protected $fillable = [
-        'Id_Stock',
-        'Id_Producto',
-        'Rut_Usuario',
-        'Cantidad',
-        'Descripcion',
-        'fechaModificacion'
+        'id_producto',
+        'rut_usuario',
+        'cantidad_ajuste',
+        'descripcion_ajuste',
+        'fecha_modificacion'
     ];
 
-    // Relación con Producto
+    // Relaciones
     public function producto()
     {
-        return $this->belongsTo(Producto::class, 'Id_Producto', 'Id_Producto');
+        return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');
     }
 
-    // Relación con Usuario (tabla _usuarios)
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'Rut_Usuario', 'Rut_Usuario');
+        return $this->belongsTo(Usuario::class, 'rut_usuario', 'rut_usuario');
     }
 }

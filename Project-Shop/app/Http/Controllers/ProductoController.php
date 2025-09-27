@@ -8,88 +8,88 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
-    /**
-     * Mostrar todos los productos y las categorías
-     */
+    // ✅ LISTAR productos
     public function index()
     {
         $productos  = Producto::all();
         $categorias = Categoria::all();
-
         return view('ajustes.index', compact('productos', 'categorias'));
     }
 
-    /**
-     * Guardar un nuevo producto
-     */
+    // ✅ GUARDAR nuevo producto
     public function store(Request $request)
     {
         $request->validate([
-            'nombre_producto'      => 'required|string|max:60',
-            'precio_producto'      => 'required|numeric|min:0',
+            'nombre_producto' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $existe = Producto::where('nombre_producto', $value)
+                        ->where('id_categoria', $request->id_categoria)
+                        ->exists();
+                    if ($existe) {
+                        $fail('El producto ya existe en esta categoría.');
+                    }
+                }
+            ],
+            'precio_producto'      => 'required|integer|min:0',
             'stock_real'           => 'required|integer|min:0',
-            'descripcion_producto' => 'required|string|max:100',
-            'id_categoria'         => 'required|string|exists:categorias,id_categoria',
+            'id_categoria'         => 'required|exists:categorias,id_categoria',
+            'descripcion_producto' => 'required'
         ]);
 
         Producto::create([
             'nombre_producto'      => $request->nombre_producto,
             'precio_producto'      => $request->precio_producto,
             'stock_real'           => $request->stock_real,
-            'descripcion_producto' => $request->descripcion_producto,
             'id_categoria'         => $request->id_categoria,
-            'estado_producto'      => 'A',
-            'stock_minimo'         => 0,
+            'descripcion_producto' => $request->descripcion_producto,
+            'estado_producto'      => 'A' // Valor por defecto
         ]);
 
-        return back()->with('success', '✅ Producto agregado con éxito');
+        return redirect()->route('ajustes.index')
+                         ->with('success', 'Producto agregado correctamente.');
     }
 
-    /**
-     * Actualizar un producto existente
-     */
+    // ✅ ACTUALIZAR producto
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nombre_producto'      => 'required|string|max:60',
-            'precio_producto'      => 'required|numeric|min:0',
+            'nombre_producto' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request, $id) {
+                    $existe = Producto::where('nombre_producto', $value)
+                        ->where('id_categoria', $request->id_categoria)
+                        ->where('id_producto', '<>', $id)
+                        ->exists();
+                    if ($existe) {
+                        $fail('Ya existe un producto con este nombre en la categoría seleccionada.');
+                    }
+                }
+            ],
+            'precio_producto'      => 'required|integer|min:0',
             'stock_real'           => 'required|integer|min:0',
-            'descripcion_producto' => 'required|string|max:100',
-            'id_categoria'         => 'required|string|exists:categorias,id_categoria',
+            'id_categoria'         => 'required|exists:categorias,id_categoria',
+            'descripcion_producto' => 'required'
         ]);
 
         $producto = Producto::findOrFail($id);
-
         $producto->update([
             'nombre_producto'      => $request->nombre_producto,
             'precio_producto'      => $request->precio_producto,
             'stock_real'           => $request->stock_real,
-            'descripcion_producto' => $request->descripcion_producto,
             'id_categoria'         => $request->id_categoria,
+            'descripcion_producto' => $request->descripcion_producto
         ]);
 
-        return back()->with('success', '✅ Producto actualizado con éxito');
+        return redirect()->route('ajustes.index')
+                         ->with('success', 'Producto actualizado correctamente.');
     }
 
-    /**
-     * Eliminar un producto
-     */
+    // ✅ ELIMINAR producto
     public function destroy($id)
     {
-        $producto = Producto::findOrFail($id);
-        $producto->delete();
-
-        return back()->with('success', '🗑️ Producto eliminado con éxito');
-    }
-
-    /**
-     * Mostrar solo los productos de la categoría Amigurumis
-     */
-    public function amigurumis()
-    {
-        // Usamos '1' porque en la DB id_categoria = '1' para amigurumi
-        $amigurumis = Producto::where('id_categoria', '1')->get();
-
-        return view('Catalogo_Amigu.index', compact('amigurumis'));
+        Producto::findOrFail($id)->delete();
+        return redirect()->route('ajustes.index')
+                         ->with('success', 'Producto eliminado correctamente.');
     }
 }

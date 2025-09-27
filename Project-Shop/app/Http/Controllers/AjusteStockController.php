@@ -14,13 +14,10 @@ class AjusteStockController extends Controller
      */
     public function index()
     {
-        // Traemos los ajustes con relaciones a Producto y Usuario
-        $ajustes = AjusteStock::with(['producto','usuario'])->get();
+        $ajustes   = AjusteStock::with(['producto','usuario'])->get();
         $productos = Producto::all();
 
-    
         return view('ajustes.index', compact('ajustes','productos'));
-
     }
 
     /**
@@ -29,24 +26,20 @@ class AjusteStockController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'Id_Producto' => 'required|string|max:2',
-            'Cantidad'    => 'required|integer|min:0',
-            'Descripcion' => 'required|string|max:60'
+            'id_producto'      => 'required|integer|exists:productos,id_producto',
+            'cantidad_ajuste'  => 'required|integer|min:0',
+            'descripcion_ajuste' => 'required|string|max:100'
         ]);
-
-        // Generar Id_Stock único (ejemplo S01, S02, S03…)
-        $nextId = str_pad(AjusteStock::count() + 1, 2, '0', STR_PAD_LEFT);
-        $codigo = 'S' . $nextId;
 
         AjusteStock::create([
-            'Id_Stock'    => $codigo,
-            'Id_Producto' => $request->Id_Producto,
-            'Rut_Usuario' => Auth::user()->Rut_Usuario, // usuario logueado
-            'Cantidad'    => $request->Cantidad,
-            'Descripcion' => $request->Descripcion
+            'id_producto'        => $request->id_producto,
+            'rut_usuario'        => Auth::user()->rut_usuario, // usuario logueado
+            'cantidad_ajuste'    => $request->cantidad_ajuste,
+            'descripcion_ajuste' => $request->descripcion_ajuste,
+            'fecha_modificacion' => now() // ✅ se completa automáticamente
         ]);
 
-        return redirect()->back()->with('success', 'Ajuste de stock agregado correctamente.');
+        return redirect()->back()->with('success', '✅ Ajuste de stock agregado correctamente.');
     }
 
     /**
@@ -55,19 +48,20 @@ class AjusteStockController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'Id_Producto' => 'required|string|max:2',
-            'Cantidad'    => 'required|integer|min:0',
-            'Descripcion' => 'required|string|max:60'
+            'id_producto'      => 'required|integer|exists:productos,id_producto',
+            'cantidad_ajuste'  => 'required|integer|min:0',
+            'descripcion_ajuste' => 'required|string|max:100'
         ]);
 
         $ajuste = AjusteStock::findOrFail($id);
         $ajuste->update([
-            'Id_Producto' => $request->Id_Producto,
-            'Cantidad'    => $request->Cantidad,
-            'Descripcion' => $request->Descripcion
+            'id_producto'        => $request->id_producto,
+            'cantidad_ajuste'    => $request->cantidad_ajuste,
+            'descripcion_ajuste' => $request->descripcion_ajuste,
+            'fecha_modificacion' => now() // ✅ se actualiza automáticamente
         ]);
 
-        return redirect()->back()->with('success', 'Ajuste de stock actualizado correctamente.');
+        return redirect()->back()->with('success', '✅ Ajuste de stock actualizado correctamente.');
     }
 
     /**
@@ -78,6 +72,6 @@ class AjusteStockController extends Controller
         $ajuste = AjusteStock::findOrFail($id);
         $ajuste->delete();
 
-        return redirect()->back()->with('success', 'Ajuste de stock eliminado correctamente.');
+        return redirect()->back()->with('success', '🗑️ Ajuste de stock eliminado correctamente.');
     }
 }

@@ -7,11 +7,13 @@ use App\Http\Controllers\AjusteStockController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 
-// ✅ Ajuste de productos
+// ✅ Después (usa los nombres reales del nuevo controller)
 Route::get('/ajustes', [ProductoController::class,'index'])->name('ajustes.index');
 Route::post('/ajustes/guardar', [ProductoController::class,'store'])->name('ajustes.guardar');
 Route::put('/ajustes/{id}/actualizar', [ProductoController::class,'update'])->name('ajustes.actualizar');
 Route::delete('/ajustes/{id}/eliminar', [ProductoController::class,'destroy'])->name('ajustes.eliminar');
+
+
 
 // ✅ Login
 Route::get('/login', function () {
