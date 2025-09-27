@@ -7,13 +7,11 @@ use App\Http\Controllers\AjusteStockController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 
-// ✅ Después (usa los nombres reales del nuevo controller)
+// ✅ Ajuste de productos
 Route::get('/ajustes', [ProductoController::class,'index'])->name('ajustes.index');
 Route::post('/ajustes/guardar', [ProductoController::class,'store'])->name('ajustes.guardar');
 Route::put('/ajustes/{id}/actualizar', [ProductoController::class,'update'])->name('ajustes.actualizar');
 Route::delete('/ajustes/{id}/eliminar', [ProductoController::class,'destroy'])->name('ajustes.eliminar');
-
-
 
 // ✅ Login
 Route::get('/login', function () {
@@ -23,25 +21,28 @@ Route::get('/login', function () {
 // ✅ Página de productos destacados
 Route::get('/productos', function () {
     return view('Productos.index');
-});
+})->name('productos.index');
 
-// ✅ Inicio
-Route::get('/', function () {
+// ✅ Inicio (vista después de login)
+Route::get('/inicio', function () {
     return view('inicio.index');
+})->name('inicio.index');
+
+// ✅ Redirección principal
+Route::get('/', function () {
+    // 🔑 Si hay sesión, ir a inicio; si no, ir a login
+    return session()->has('usuario')
+        ? redirect()->route('inicio.index')
+        : redirect()->route('login');
 });
 
 // ✅ Catálogos dinámicos
 Route::get('/catalogo/vestidos', [CatalogoController::class, 'index'])
-    ->defaults('tipo', 'vestidos')
-    ->name('catalogo.vestidos');
-
+    ->defaults('tipo', 'vestidos')->name('catalogo.vestidos');
 Route::get('/catalogo/fiesta', [CatalogoController::class, 'index'])
-    ->defaults('tipo', 'fiesta')
-    ->name('catalogo.fiesta');
-
+    ->defaults('tipo', 'fiesta')->name('catalogo.fiesta');
 Route::get('/catalogo/amigu', [CatalogoController::class, 'index'])
-    ->defaults('tipo', 'amigurumis')
-    ->name('catalogo.amigurumis');
+    ->defaults('tipo', 'amigurumis')->name('catalogo.amigurumis');
 
 // ✅ Carrito
 Route::get('/carrito', [CarritoController::class, 'mostrar'])->name('carrito.mostrar');

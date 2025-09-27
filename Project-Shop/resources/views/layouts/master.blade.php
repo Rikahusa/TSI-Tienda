@@ -12,20 +12,26 @@
             background-position: center; 
             background-repeat: no-repeat;
             background-attachment: fixed;">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid justify-content-center">
             <a class="navbar-brand" href="{{ url('/') }}">Vivi Luna</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-1" href="{{ url('/login') }}">
-                            <span class="material-symbols-outlined">account_circle</span>
-                            Iniciar Sesión
-                        </a>
-                    </li>
+                    
+                    {{-- ✅ Mostrar solo si NO hay sesión --}}
+                    @if(!session()->has('usuario'))
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-1" href="{{ route('login') }}">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                Iniciar Sesión
+                            </a>
+                        </li>
+                    @endif
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             Redes Sociales
@@ -35,31 +41,46 @@
                             <li><a class="dropdown-item" href="#">Correo</a></li>
                         </ul>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-1" href="{{ url('/productos') }}">
                             <span class="material-symbols-outlined">apparel</span>
                             Productos
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-1" href="{{ url('/carrito') }}">
-                            <span class="material-symbols-outlined d-flex align-items-center">shopping_cart</span>
+                            <span class="material-symbols-outlined">shopping_cart</span>
                             Carrito
                         </a>
                     </li>
 
-                    <!-- ✅ Nuevo enlace a Ajuste de Stock -->
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-1" href="{{ route('ajustes.index') }}">
                             <span class="material-symbols-outlined">inventory</span>
                             Ajuste de Stock
                         </a>
                     </li>
-                    <!-- ✅ Fin del nuevo enlace -->
+
+                    {{-- ✅ Mostrar solo si SÍ hay sesión --}}
+                    @if(session()->has('usuario'))
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn nav-link d-flex align-items-center gap-1 border-0 bg-transparent">
+                                    <span class="material-symbols-outlined">logout</span>
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    @endif
+
                 </ul>
             </div>
         </div>
     </nav>
+
 
     @yield('contenido-principal')
 

@@ -2,94 +2,112 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Categoria;
-use Illuminate\Http\Request;
+use App\Models\AjusteStock;
 
 class ProductoController extends Controller
 {
-    // ✅ LISTAR productos
+    /**
+     * Muestra la vista principal de ajustes de productos.
+     */
     public function index()
     {
         $productos  = Producto::all();
         $categorias = Categoria::all();
+
         return view('ajustes.index', compact('productos', 'categorias'));
     }
 
-    // ✅ GUARDAR nuevo producto
+    /**
+     * Guarda un nuevo producto y registra el ajuste inicial.
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'nombre_producto' => [
-                'required',
-                function ($attribute, $value, $fail) use ($request) {
-                    $existe = Producto::where('nombre_producto', $value)
-                        ->where('id_categoria', $request->id_categoria)
-                        ->exists();
-                    if ($existe) {
-                        $fail('El producto ya existe en esta categoría.');
-                    }
-                }
-            ],
-            'precio_producto'      => 'required|integer|min:0',
-            'stock_real'           => 'required|integer|min:0',
-            'id_categoria'         => 'required|exists:categorias,id_categoria',
-            'descripcion_producto' => 'required'
+            'nombre_producto'     => 'required|string|max:100|unique:productos,nombre_producto',
+            'precio_producto'     => 'required|integer|min:0',
+            'stock_real'          => 'required|integer|min:0',
+            'id_categoria'        => 'required|integer|exists:categorias,id_categoria',
+            'descripcion_producto'=> 'required|string|max:500'
         ]);
 
-        Producto::create([
-            'nombre_producto'      => $request->nombre_producto,
-            'precio_producto'      => $request->precio_producto,
-            'stock_real'           => $request->stock_real,
-            'id_categoria'         => $request->id_categoria,
-            'descripcion_producto' => $request->descripcion_producto,
-            'estado_producto'      => 'A' // Valor por defecto
+        // ✅ Crear el producto
+        $producto = Producto::create([
+            'nombre_producto'     => $request->nombre_producto,
+            'precio_producto'     => $request->precio_producto,
+            'stock_real'          => $request->stock_real,
+            'id_categoria'        => $request->id_categoria,
+            'descripcion_producto'=> $request->descripcion_producto,
+            'estado_producto'     => 'A' // activo por defecto
         ]);
+
+        // ✅ Registrar ajuste de stock inicial
+        if (session()->has('usuario')) {
+            AjusteStock::create([
+                'id_producto'        => $producto->id_producto,
+                'rut_usuario'        => session('usuario')->rut_usuario, // ✅ sesión manual
+                'cantidad_ajuste'    => $producto->stock_real,
+                'descripcion_ajuste' => 'Stock inicial',
+                'fecha_modificacion' => now(),
+            ]);
+        }
 
         return redirect()->route('ajustes.index')
-                         ->with('success', 'Producto agregado correctamente.');
+            ->with('success', '✅ Producto agregado y ajuste de stock registrado.');
     }
 
-    // ✅ ACTUALIZAR producto
+    /**
+     * Actualiza un producto existente y registra el ajuste si cambia el stock.
+     */
     public function update(Request $request, $id)
     {
+        $producto = Producto::findOrFail($id);
+
         $request->validate([
-            'nombre_producto' => [
-                'required',
-                function ($attribute, $value, $fail) use ($request, $id) {
-                    $existe = Producto::where('nombre_producto', $value)
-                        ->where('id_categoria', $request->id_categoria)
-                        ->where('id_producto', '<>', $id)
-                        ->exists();
-                    if ($existe) {
-                        $fail('Ya existe un producto con este nombre en la categoría seleccionada.');
-                    }
-                }
-            ],
-            'precio_producto'      => 'required|integer|min:0',
-            'stock_real'           => 'required|integer|min:0',
-            'id_categoria'         => 'required|exists:categorias,id_categoria',
-            'descripcion_producto' => 'required'
+            'nombre_producto'     => 'required|string|max:100|unique:productos,nombre_producto,' . $producto->id_producto . ',id_producto',
+            'precio_producto'     => 'required|integer|min:0',
+            'stock_real'          => 'required|integer|min:0',
+            'id_categoria'        => 'required|integer|exists:categorias,id_categoria',
+            'descripcion_producto'=> 'required|string|max:500'
         ]);
 
-        $producto = Producto::findOrFail($id);
+        $stockAnterior = $producto->stock_real;
+
+        // ✅ Actualizar producto
         $producto->update([
-            'nombre_producto'      => $request->nombre_producto,
-            'precio_producto'      => $request->precio_producto,
-            'stock_real'           => $request->stock_real,
-            'id_categoria'         => $request->id_categoria,
-            'descripcion_producto' => $request->descripcion_producto
+            'nombre_producto'     => $request->nombre_producto,
+            'precio_producto'     => $request->precio_producto,
+            'stock_real'          => $request->stock_real,
+            'id_categoria'        => $request->id_categoria,
+            'descripcion_producto'=> $request->descripcion_producto
         ]);
+
+        // ✅ Registrar ajuste solo si cambia el stock
+        if ($stockAnterior != $request->stock_real && session()->has('usuario')) {
+            AjusteStock::create([
+                'id_producto'        => $producto->id_producto,
+                'rut_usuario'        => session('usuario')->rut_usuario,
+                'cantidad_ajuste'    => $request->stock_real - $stockAnterior,
+                'descripcion_ajuste' => 'Edición de producto (ajuste de stock)',
+                'fecha_modificacion' => now(),
+            ]);
+        }
 
         return redirect()->route('ajustes.index')
-                         ->with('success', 'Producto actualizado correctamente.');
+            ->with('success', '✅ Producto actualizado correctamente.');
     }
 
-    // ✅ ELIMINAR producto
+    /**
+     * Elimina un producto.
+     */
     public function destroy($id)
     {
-        Producto::findOrFail($id)->delete();
+        $producto = Producto::findOrFail($id);
+        $producto->delete();
+
         return redirect()->route('ajustes.index')
-                         ->with('success', 'Producto eliminado correctamente.');
+            ->with('success', '🗑️ Producto eliminado correctamente.');
     }
 }
