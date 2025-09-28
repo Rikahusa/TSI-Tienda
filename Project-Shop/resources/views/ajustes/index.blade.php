@@ -32,6 +32,7 @@
                             <th width="20%">Nombre</th>
                             <th width="15%">Precio</th>
                             <th width="10%">Stock</th>
+                            <th width="15%">Estado</th>
                             <th width="20%">Categoría</th>
                             <th width="20%">Descripción</th>
                             <th width="20%">Acciones</th>
@@ -44,6 +45,7 @@
                             <td>{{ $producto->nombre_producto }}</td>
                             <td>${{ number_format($producto->precio_producto, 0, ',', '.') }}</td>
                             <td>{{ $producto->stock_real }}</td>
+                            <td>{{ $producto->estado_producto == 'A' ? 'Activo' : 'Inactivo' }}</td>
                             <td>
                                 @php
                                     $categoria = $categorias->firstWhere('id_categoria', $producto->id_categoria);
@@ -111,6 +113,13 @@
                            value="{{ $producto->stock_real }}" required>
                 </div>
                 <div class="mb-3">
+                    <label>Estado</label>
+                    <select name="estado_producto" class="form-control" required>
+                        <option value="A" {{ $producto->estado_producto == 'A' ? 'selected' : '' }}>Activo</option>
+                        <option value="I" {{ $producto->estado_producto == 'I' ? 'selected' : '' }}>Inactivo</option>
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label>Categoría</label>
                     <select name="id_categoria" class="form-control" required>
                         @foreach($categorias as $cat)
@@ -124,12 +133,6 @@
                 <div class="mb-3">
                     <label>Descripción</label>
                     <textarea name="descripcion_producto" class="form-control" required>{{ $producto->descripcion_producto }}</textarea>
-                </div>
-
-                <!-- NUEVO: campo opcional para la descripción del ajuste -->
-                <div class="mb-3">
-                    <label>Motivo del ajuste (opcional)</label>
-                    <textarea name="descripcion_ajuste" class="form-control" placeholder="Ej: Cambio de precio, corrección de stock">{{ old('descripcion_ajuste') }}</textarea>
                 </div>
             </div>
             <div class="modal-footer">

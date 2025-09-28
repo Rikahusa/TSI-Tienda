@@ -59,7 +59,8 @@ class ProductoController extends Controller
             'precio_producto'      => 'required|integer|min:0',
             'stock_real'           => 'required|integer|min:0',
             'id_categoria'         => 'required|integer|exists:categorias,id_categoria',
-            'descripcion_producto' => 'required|string|max:500'
+            'descripcion_producto' => 'required|string|max:500',
+            'estado_producto'      => 'required|in:A,I'
         ]);
 
         $stockAnterior = $producto->stock_real;
@@ -70,7 +71,8 @@ class ProductoController extends Controller
             'precio_producto'      => $request->precio_producto,
             'stock_real'           => $request->stock_real,
             'id_categoria'         => $request->id_categoria,
-            'descripcion_producto' => $request->descripcion_producto
+            'descripcion_producto' => $request->descripcion_producto,
+            'estado_producto'      => $request->estado_producto
         ]);
 
         // ✅ Registrar ajuste siempre que haya usuario en sesión
@@ -78,13 +80,15 @@ class ProductoController extends Controller
             AjusteStock::create([
                 'id_producto'                 => $producto->id_producto,
                 'rut_usuario'                 => session('usuario')['rut_usuario'],
-                'cantidad_ajuste'             => $request->stock_real - $stockAnterior,
-                'descripcion_ajuste'          => 'Edición de producto (ajuste de stock)',
+                'cantidad_ajuste'             => $request->stock_real, // ahora guarda el valor correcto
+                'descripcion_ajuste'          => $request->descripcion_producto, // descripción escrita
                 'fecha_modificacion'          => now(),
+
+                // CAMPOS NUEVOS PARA REGISTRO COMPLETO
                 'ajuste_nombre'               => $producto->nombre_producto,
                 'ajuste_precio'               => $producto->precio_producto,
-                'ajuste_id_categoria'         => $producto->id_categoria,
-                'ajuste_descripcion_producto' => $producto->descripcion_producto,
+                'ajuste_descripcion'          => $request->descripcion_producto,
+                'ajuste_estado'               => $producto->estado_producto,
                 'ajuste_stock_real'           => $producto->stock_real,
                 'ajuste_stock_minimo'         => $producto->stock_minimo,
             ]);

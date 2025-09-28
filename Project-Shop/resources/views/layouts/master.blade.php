@@ -88,7 +88,7 @@
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> 
 
     {{-- ✅ Contenido principal de cada vista --}}
     <div class="container mt-4">
