@@ -125,6 +125,12 @@
                     <label>Descripción</label>
                     <textarea name="descripcion_producto" class="form-control" required>{{ $producto->descripcion_producto }}</textarea>
                 </div>
+
+                <!-- NUEVO: campo opcional para la descripción del ajuste -->
+                <div class="mb-3">
+                    <label>Motivo del ajuste (opcional)</label>
+                    <textarea name="descripcion_ajuste" class="form-control" placeholder="Ej: Cambio de precio, corrección de stock">{{ old('descripcion_ajuste') }}</textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

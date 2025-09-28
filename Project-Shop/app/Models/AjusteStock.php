@@ -9,7 +9,6 @@ class AjusteStock extends Model
 {
     use HasFactory;
 
-    // ✅ Nombre real de la tabla
     protected $table = 'ajustes';
     protected $primaryKey = 'id_stock';
     public $incrementing = true;
@@ -21,7 +20,13 @@ class AjusteStock extends Model
         'rut_usuario',
         'cantidad_ajuste',
         'descripcion_ajuste',
-        'fecha_modificacion'
+        'fecha_modificacion',
+        'ajuste_nombre',
+        'ajuste_precio',
+        'ajuste_descripcion',
+        'ajuste_estado',
+        'ajuste_stock_real',
+        'ajuste_stock_minimo',
     ];
 
     // Relaciones

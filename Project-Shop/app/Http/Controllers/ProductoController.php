@@ -21,7 +21,7 @@ class ProductoController extends Controller
     }
 
     /**
-     * Guarda un nuevo producto y registra el ajuste inicial.
+     * Guarda un nuevo producto.
      */
     public function store(Request $request)
     {
@@ -33,8 +33,8 @@ class ProductoController extends Controller
             'descripcion_producto' => 'required|string|max:500'
         ]);
 
-        // ✅ Crear el producto
-        $producto = Producto::create([
+        // ✅ Crear el producto (solo en tabla productos)
+        Producto::create([
             'nombre_producto'      => $request->nombre_producto,
             'precio_producto'      => $request->precio_producto,
             'stock_real'           => $request->stock_real,
@@ -43,23 +43,12 @@ class ProductoController extends Controller
             'estado_producto'      => 'A' // activo por defecto
         ]);
 
-        // ✅ Registrar ajuste de stock inicial
-        if (session()->has('usuario')) {
-            AjusteStock::create([
-                'id_producto'        => $producto->id_producto,
-                'rut_usuario'        => session('usuario')['rut_usuario'], // ✅ ACCESO COMO ARRAY
-                'cantidad_ajuste'    => $producto->stock_real,
-                'descripcion_ajuste' => 'Stock inicial',
-                'fecha_modificacion' => now(),
-            ]);
-        }
-
         return redirect()->route('ajustes.index')
-            ->with('success', '✅ Producto agregado y ajuste de stock registrado.');
+            ->with('success', '✅ Producto agregado correctamente.');
     }
 
     /**
-     * Actualiza un producto existente y registra el ajuste si cambia el stock.
+     * Actualiza un producto existente y registra el ajuste en la tabla ajustes.
      */
     public function update(Request $request, $id)
     {
@@ -84,14 +73,20 @@ class ProductoController extends Controller
             'descripcion_producto' => $request->descripcion_producto
         ]);
 
-        // ✅ Registrar ajuste solo si cambia el stock
-        if ($stockAnterior != $request->stock_real && session()->has('usuario')) {
+        // ✅ Registrar ajuste siempre que haya usuario en sesión
+        if (session()->has('usuario')) {
             AjusteStock::create([
-                'id_producto'        => $producto->id_producto,
-                'rut_usuario'        => session('usuario')['rut_usuario'], // ✅ ACCESO COMO ARRAY
-                'cantidad_ajuste'    => $request->stock_real - $stockAnterior,
-                'descripcion_ajuste' => 'Edición de producto (ajuste de stock)',
-                'fecha_modificacion' => now(),
+                'id_producto'                 => $producto->id_producto,
+                'rut_usuario'                 => session('usuario')['rut_usuario'],
+                'cantidad_ajuste'             => $request->stock_real - $stockAnterior,
+                'descripcion_ajuste'          => 'Edición de producto (ajuste de stock)',
+                'fecha_modificacion'          => now(),
+                'ajuste_nombre'               => $producto->nombre_producto,
+                'ajuste_precio'               => $producto->precio_producto,
+                'ajuste_id_categoria'         => $producto->id_categoria,
+                'ajuste_descripcion_producto' => $producto->descripcion_producto,
+                'ajuste_stock_real'           => $producto->stock_real,
+                'ajuste_stock_minimo'         => $producto->stock_minimo,
             ]);
         }
 
