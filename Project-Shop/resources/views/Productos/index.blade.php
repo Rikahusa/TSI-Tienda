@@ -64,7 +64,7 @@
                         <h5 class="card-title">Vestimentas y accesorios de Lana</h5>
                         <p class="card-text">Explora nuestra colección de vestimentas y accesorios tejidos a mano.</p>
                         <div class="d-flex justify-content-center">
-                           <a href="{{ url('/catalogo/vestidos') }}" class="btn btn-primary mt-3">Ver Más</a>
+                            <a href="{{ url('/catalogo/vestidos') }}" class="btn btn-primary mt-3">Ver Más</a>
                         </div>
                     </div>
                 </div>
