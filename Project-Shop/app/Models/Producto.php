@@ -11,9 +11,9 @@ class Producto extends Model
 
     protected $table = 'productos';
     protected $primaryKey = 'id_producto';
-    public $incrementing = true;           // ✅ es autoincremental
-    protected $keyType = 'int';            // ✅ tipo entero
-    public $timestamps = false;            // ✅ no hay created_at / updated_at
+    public $incrementing = true;           
+    protected $keyType = 'int';            
+    public $timestamps = false;           
 
     protected $fillable = [
         'nombre_producto',
@@ -32,7 +32,7 @@ class Producto extends Model
         'estado_producto' => 'string'
     ];
 
-    // 🔗 Relaciones
+    //Relaciones
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
@@ -43,7 +43,7 @@ class Producto extends Model
         return $this->hasMany(Carrito::class, 'id_producto', 'id_producto');
     }
 
-    // Métodos útiles
+    // Metodos
     public function estaActivo()
     {
         return $this->estado_producto === 'A';

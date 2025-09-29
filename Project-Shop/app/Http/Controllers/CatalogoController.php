@@ -9,9 +9,9 @@ class CatalogoController extends Controller
 {
     public function index($tipo)
     {
-        // 🟢 Mapeo de slug a ID de categoría
+        // Mapeo de   ID de categoría
         $map = [
-            'amigurumis' => 1,  // Ajusta según tus IDs reales
+            'amigurumis' => 1,  
             'fiesta'    => 2,
             'vestidos'   => 3,
         ];

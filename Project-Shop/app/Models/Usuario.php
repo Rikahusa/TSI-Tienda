@@ -10,22 +10,14 @@ class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // Nombre exacto de la tabla
-    protected $table = 'usuarios';
+    
+    protected $table = 'usuarios'; // nombre de la tabla -Ivan
+    protected $primaryKey = 'rut_usuario'; // clave de la tabla - Ivan
+    public $incrementing = false; // PK no incremental
+    protected $keyType = 'string'; // tipo de dato de la clave primaria como en el informe -Ivan
+    public $timestamps = false;  //Lo deje apagado porque en el informe dejamos la tabla sin timestamps -Ivan
 
-    // Clave primaria
-    protected $primaryKey = 'rut_usuario';
-
-    // PK no incremental
-    public $incrementing = false;
-
-    // Tipo de PK
-    protected $keyType = 'string';
-
-    public $timestamps = false;
-
-    // Campos permitidos para asignación masiva
-    protected $fillable = [
+    protected $fillable = [   // estos son los campos  de nuestra tabla -Ivan
         'rut_usuario',
         'nombre_usuario',
         'apellido_usuario',
@@ -36,14 +28,11 @@ class Usuario extends Authenticatable
         'tipo_usuario',
     ];
 
-    // Campos ocultos
-    protected $hidden = [
+    protected $hidden = [  // Campos ocultos -Ivan
         'pass_usuario',
-        'remember_token',
     ];
-
-    // Indicar a Laravel cuál es la contraseña
-    public function getAuthPassword()
+   
+    public function getAuthPassword()  // Decimos cual es el campo que sera la contraseña -Ivan
     {
         return $this->pass_usuario;
     }

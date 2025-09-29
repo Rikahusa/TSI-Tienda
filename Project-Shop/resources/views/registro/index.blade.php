@@ -98,25 +98,26 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="telefono" class="form-label">Teléfono</label>
-                                            <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="+56912345678" maxlength="12" value="{{ old('telefono') }}" required>
+                                            <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                            placeholder="954785412" maxlength="9" value="{{ old('telefono') }}" required>
                                         </div>
-                                        <script>
-                                            document.getElementById("telefono").addEventListener("blur", function() {
-                                                let valor = this.value.trim();
-
-                                                // Si empieza con 9 y tiene 9 dígitos se le agregara el prefijo +56
-                                                if (/^9\d{8}$/.test(valor)) {
-                                                    this.value = "+56" + valor;
-                                                }
-                                                
-                                                // Si empieza con 56 sin el + → agregar el +
-                                                else if (/^56\d{9}$/.test(valor)) {
-                                                    this.value = "+" + valor;
-                                                }
-                                            });
-                                        </script>
                                     </div>
                                     
+                                    <script>
+                                        document.getElementById("telefono").addEventListener("blur", function() {
+                                            let valor = this.value.trim();
+
+                                            // Solo permitir números y exactamente 9 dígitos
+                                            if (!/^\d{9}$/.test(valor)) {
+                                                this.value = ""; // Vaciar campo si no son 9 dígitos
+                                                return;
+                                            }
+
+                                            // Agregar +56 automáticamente
+                                            this.value = "+56" + valor;
+                                        });
+                                    </script>
+
                                     <div class="mb-3">
                                         <label for="nuevoRut" class="form-label">Rut Usuario</label>
                                         <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" placeholder="Ej: 123456789K" pattern="^[0-9]{7,8}[0-9Kk]{1}$" title="Ingrese el RUT sin puntos ni guión. Ejemplo: 123456789K" value="{{ old('nuevoRut') }}" maxlength="9" required>
@@ -155,4 +156,4 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
-</html> 
+</html>

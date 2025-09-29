@@ -29,7 +29,7 @@ class AuthController extends Controller
                 default => 'Usuario',
             };
 
-            // ✅ Guardar datos en sesión
+            //  Guardar datos en sesión
             session([
                 'usuario' => [
                     'rut_usuario'    => $usuario->rut_usuario,

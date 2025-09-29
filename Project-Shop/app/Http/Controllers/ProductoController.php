@@ -33,7 +33,7 @@ class ProductoController extends Controller
             'descripcion_producto' => 'required|string|max:500'
         ]);
 
-        // ✅ Crear el producto (solo en tabla productos)
+        //  Crear el producto (solo en tabla productos)
         Producto::create([
             'nombre_producto'      => $request->nombre_producto,
             'precio_producto'      => $request->precio_producto,
@@ -44,7 +44,7 @@ class ProductoController extends Controller
         ]);
 
         return redirect()->route('ajustes.index')
-            ->with('success', '✅ Producto agregado correctamente.');
+            ->with('success', ' Producto agregado correctamente.');
     }
 
     /**
@@ -65,7 +65,7 @@ class ProductoController extends Controller
 
         $stockAnterior = $producto->stock_real;
 
-        // ✅ Actualizar producto
+        //  Actualizar producto
         $producto->update([
             'nombre_producto'      => $request->nombre_producto,
             'precio_producto'      => $request->precio_producto,
@@ -75,7 +75,7 @@ class ProductoController extends Controller
             'estado_producto'      => $request->estado_producto
         ]);
 
-        // ✅ Registrar ajuste siempre que haya usuario en sesión
+        // Registrar ajuste siempre que haya usuario en sesión
         if (session()->has('usuario')) {
             AjusteStock::create([
                 'id_producto'                 => $producto->id_producto,
@@ -95,7 +95,7 @@ class ProductoController extends Controller
         }
 
         return redirect()->route('ajustes.index')
-            ->with('success', '✅ Producto actualizado correctamente.');
+            ->with('success', ' Producto actualizado correctamente.');
     }
 
     /**
@@ -107,6 +107,6 @@ class ProductoController extends Controller
         $producto->delete();
 
         return redirect()->route('ajustes.index')
-            ->with('success', '🗑️ Producto eliminado correctamente.');
+            ->with('success', ' Producto eliminado correctamente.');
     }
 }

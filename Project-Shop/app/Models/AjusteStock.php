@@ -9,13 +9,13 @@ class AjusteStock extends Model
 {
     use HasFactory;
 
-    protected $table = 'ajustes';
-    protected $primaryKey = 'id_stock';
-    public $incrementing = true;
-    protected $keyType = 'int';
-    public $timestamps = false; // usamos timestamp manual
+    protected $table = 'ajustes'; // nombre de la tabla *Bryan
+    protected $primaryKey = 'id_stock'; //clave primaria *Bryan
+    public $incrementing = true;  //tiene que ser autoincrementada porque subira con los numeros de ajustes *Bryan
+    protected $keyType = 'int';  //el tipo de dato *Bryan
+    public $timestamps = false; // usamos timestamp manual *Bryan
 
-    protected $fillable = [
+    protected $fillable = [ //nuestros campos *Bryan
         'id_producto',
         'rut_usuario',
         'cantidad_ajuste',
@@ -29,14 +29,13 @@ class AjusteStock extends Model
         'ajuste_stock_minimo',
     ];
 
-    // Relaciones
+    // Relaciones con la tabla producto *Bryan
     public function producto()
     {
-        return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');
-    }
-
+        return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');  //cada ajuste pertenece a un producto  
+    }                                               
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'rut_usuario', 'rut_usuario');
+        return $this->belongsTo(Usuario::class, 'rut_usuario', 'rut_usuario'); //cada ajuste pertenece a un usuario, lo mismo de arriba *Bryan
     }
 }

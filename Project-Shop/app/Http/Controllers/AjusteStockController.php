@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AjusteStock;
 use App\Models\Producto;
-use App\Models\Categoria;   // ✅ IMPORTANTE: agregado
+use App\Models\Categoria;   
 use Illuminate\Support\Facades\Auth;
 
 class AjusteStockController extends Controller
@@ -17,7 +17,7 @@ class AjusteStockController extends Controller
     {
         $ajustes     = AjusteStock::with(['producto','usuario'])->get();
         $productos   = Producto::all();
-        $categorias  = Categoria::all(); // ✅ Enviamos categorías a la vista
+        $categorias  = Categoria::all(); //  Enviamos categorías a la vista
 
         return view('ajustes.index', compact('ajustes','productos','categorias'));
     }
@@ -41,7 +41,7 @@ class AjusteStockController extends Controller
             'fecha_modificacion' => now()
         ]);
 
-        return redirect()->back()->with('success', '✅ Ajuste de stock agregado correctamente.');
+        return redirect()->back()->with('success', ' Ajuste de stock agregado correctamente.');
     }
 
     /**
@@ -63,7 +63,7 @@ class AjusteStockController extends Controller
             'fecha_modificacion' => now()
         ]);
 
-        return redirect()->back()->with('success', '✅ Ajuste de stock actualizado correctamente.');
+        return redirect()->back()->with('success', ' Ajuste de stock actualizado correctamente.');
     }
 
     /**
@@ -74,6 +74,6 @@ class AjusteStockController extends Controller
         $ajuste = AjusteStock::findOrFail($id);
         $ajuste->delete();
 
-        return redirect()->back()->with('success', '🗑️ Ajuste de stock eliminado correctamente.');
+        return redirect()->back()->with('success', ' Ajuste de stock eliminado correctamente.');
     }
 }

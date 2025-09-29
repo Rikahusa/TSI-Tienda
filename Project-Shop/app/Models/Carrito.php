@@ -9,46 +9,42 @@ class Carrito extends Model
 {
     use HasFactory;
 
-    // ✅ Nombre exacto de la tabla (minúsculas)
-    protected $table = 'carrito';
+    protected $table = 'carrito'; // nombre de la tabla *Bryan
 
-    // ⚠️ La PK es compuesta (rut_usuario + id_producto), Laravel no la maneja nativamente
-    protected $primaryKey = null;
-    public $incrementing = false;
-
-    // ✅ No usamos created_at / updated_at
+    //(rut_usuario + id_producto)
+    protected $primaryKey = null; // esta null para decir que hay mas de una clave primaria *Bryan
+    public $incrementing = false; 
     public $timestamps = false;
 
-    // ✅ Campos permitidos para asignación masiva
     protected $fillable = [
         'rut_usuario',
         'id_producto',
         'cantidad_item'
     ];
 
-    // ✅ Casting para que cantidad sea int
-    protected $casts = [
+    
+    protected $casts = [ //convierte los valores de  de la bd a un tipo especifico
         'cantidad_item' => 'integer'
     ];
 
-    // 🔗 Relaciones
+    //Relaciones
     public function usuario()
     {
-        // FK rut_usuario → usuarios.rut_usuario
+        
         return $this->belongsTo(Usuario::class, 'rut_usuario', 'rut_usuario');
     }
 
     public function producto()
     {
-        // FK id_producto → productos.id_producto
+        
         return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');
     }
 
-    // ✅ Subtotal calculado
-    public function getSubtotalAttribute()
+    
+    public function getSubtotalAttribute() //funcion para calcular el subtotal *Bryan
     {
         return $this->producto
-            ? $this->producto->precio_producto * $this->cantidad_item
+            ? $this->producto->precio_producto * $this->cantidad_item //este producto multiplicamelo x la cantidad de items y si no hay nada muestra 0 *Bryan
             : 0;
     }
 }

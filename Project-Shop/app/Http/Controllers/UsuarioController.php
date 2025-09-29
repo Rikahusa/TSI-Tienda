@@ -31,7 +31,6 @@ class UsuarioController extends Controller
         // Mapear el valor del rol
         $tipoUsuario = match ($request->rol) {
             'Admin'    => 'A',
-            'Empleado' => 'E',
             default    => 'U',
         };
 

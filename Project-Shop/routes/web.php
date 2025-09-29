@@ -8,11 +8,11 @@ use App\Http\Controllers\CarritoController;
 
 /*
 |--------------------------------------------------------------------------
-| 🟢 Rutas protegidas SOLO para Admin (verificación manual)
+|  Rutas protegidas SOLO para Admin (verificación manual)
 |--------------------------------------------------------------------------
 */
 Route::group([], function () {
-    // ✅ Verificación de ADMIN en cada ruta de ajustes
+    //  Verificación de ADMIN en cada ruta de ajustes
     $verificarAdmin = function () {
         if (!session()->has('usuario') || session('usuario.rol') !== 'Admin') {
             abort(403, 'Acceso denegado.');
@@ -42,7 +42,7 @@ Route::group([], function () {
 
 /*
 |--------------------------------------------------------------------------
-| 🟢 Login y Usuarios
+|  Login y Usuarios
 |--------------------------------------------------------------------------
 */
 Route::get('/login', function () {
@@ -56,7 +56,7 @@ Route::post('/registro', [UsuarioController::class, 'store'])->name('registro.st
 
 /*
 |--------------------------------------------------------------------------
-| 🟢 Productos y Carrito
+| Productos y Carrito
 |--------------------------------------------------------------------------
 */
 Route::get('/productos', function () {
@@ -69,7 +69,7 @@ Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])-
 
 /*
 |--------------------------------------------------------------------------
-| 🟢 Inicio y Catálogos
+| Inicio y Catálogos
 |--------------------------------------------------------------------------
 */
 Route::get('/inicio', function () {
@@ -78,7 +78,7 @@ Route::get('/inicio', function () {
 
 /*
 |--------------------------------------------------------------------------
-| 🟢 Página principal SIEMPRE → Login
+|  Página principal SIEMPRE → Login
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {

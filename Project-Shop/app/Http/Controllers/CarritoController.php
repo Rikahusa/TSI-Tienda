@@ -9,7 +9,7 @@ use App\Models\Producto;
 class CarritoController extends Controller
 {
     /**
-     * 👉 Mostrar el carrito del usuario logueado
+     *  Mostrar el carrito del usuario logueado
      */
     public function mostrar()
     {
