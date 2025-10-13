@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AjusteStockController extends Controller
 {
-    /**
-     * Muestra todos los ajustes de stock.
-     */
+    //Muestra todos los ajustes de stock.
     public function index()
     {
+        // Cargamos ajustes con relaciones para mostrar detalles
         $ajustes     = AjusteStock::with(['producto','usuario'])->get();
         $productos   = Producto::all();
         $categorias  = Categoria::all(); //  Enviamos categorías a la vista
@@ -22,9 +21,7 @@ class AjusteStockController extends Controller
         return view('ajustes.index', compact('ajustes','productos','categorias'));
     }
 
-    /**
-     * Guarda un nuevo ajuste en la base de datos.
-     */
+    //Guarda un nuevo ajuste en la base de datos.
     public function store(Request $request)
     {
         $request->validate([
@@ -33,6 +30,7 @@ class AjusteStockController extends Controller
             'descripcion_ajuste'=> 'required|string|max:100'
         ]);
 
+        // Crear el ajuste
         AjusteStock::create([
             'id_producto'        => $request->id_producto,
             'rut_usuario'        => Auth::user()->rut_usuario, // usuario logueado
@@ -44,9 +42,7 @@ class AjusteStockController extends Controller
         return redirect()->back()->with('success', ' Ajuste de stock agregado correctamente.');
     }
 
-    /**
-     * Actualiza un ajuste existente.
-     */
+    //Actualiza un ajuste existente.
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -55,6 +51,7 @@ class AjusteStockController extends Controller
             'descripcion_ajuste'=> 'required|string|max:100'
         ]);
 
+        // Actualizar el ajuste
         $ajuste = AjusteStock::findOrFail($id);
         $ajuste->update([
             'id_producto'        => $request->id_producto,
@@ -66,9 +63,7 @@ class AjusteStockController extends Controller
         return redirect()->back()->with('success', ' Ajuste de stock actualizado correctamente.');
     }
 
-    /**
-     * Elimina un ajuste.
-     */
+    //Elimina un ajuste.
     public function destroy($id)
     {
         $ajuste = AjusteStock::findOrFail($id);

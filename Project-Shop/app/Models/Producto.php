@@ -9,12 +9,14 @@ class Producto extends Model
 {
     use HasFactory;
 
+    //tabla y llave primaria
     protected $table = 'productos';
     protected $primaryKey = 'id_producto';
     public $incrementing = true;           
     protected $keyType = 'int';            
     public $timestamps = false;           
 
+    //campos
     protected $fillable = [
         'nombre_producto',
         'precio_producto',
@@ -25,6 +27,7 @@ class Producto extends Model
         'stock_minimo'
     ];
 
+    //casts
     protected $casts = [
         'precio_producto' => 'float',
         'stock_real'      => 'integer',
@@ -38,6 +41,7 @@ class Producto extends Model
         return $this->belongsTo(Categoria::class, 'id_categoria', 'id_categoria');
     }
 
+    //Relacion con carrito
     public function carritos()
     {
         return $this->hasMany(Carrito::class, 'id_producto', 'id_producto');
@@ -49,11 +53,13 @@ class Producto extends Model
         return $this->estado_producto === 'A';
     }
 
+    //Metodo de Stock disponible
     public function tieneStock()
     {
         return $this->stock_real > 0;
     }
 
+    //Metodo de Stock bajo
     public function stockBajo()
     {
         return $this->stock_real <= $this->stock_minimo;

@@ -16,31 +16,33 @@ class Carrito extends Model
     public $incrementing = false; 
     public $timestamps = false;
 
+    //campos
     protected $fillable = [
         'rut_usuario',
         'id_producto',
         'cantidad_item'
     ];
 
-    
+    //casts
     protected $casts = [ //convierte los valores de  de la bd a un tipo especifico
         'cantidad_item' => 'integer'
     ];
 
-    //Relaciones
+    //Relaciones con usuario
     public function usuario()
     {
         
         return $this->belongsTo(Usuario::class, 'rut_usuario', 'rut_usuario');
     }
 
+    //Relacion con producto
     public function producto()
     {
         
         return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');
     }
 
-    
+    // Metodos
     public function getSubtotalAttribute() //funcion para calcular el subtotal *Bryan
     {
         return $this->producto

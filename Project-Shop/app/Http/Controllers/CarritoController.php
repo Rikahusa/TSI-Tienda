@@ -8,9 +8,7 @@ use App\Models\Producto;
 
 class CarritoController extends Controller
 {
-    /**
-     *  Mostrar el carrito del usuario logueado
-     */
+    //Mostrar el carrito del usuario logueado
     public function mostrar()
     {
         if (!session()->has('usuario')) {
@@ -25,6 +23,7 @@ class CarritoController extends Controller
             ->with('producto')
             ->get();
 
+        // Calcular el total
         $total = $itemsCarrito->sum(function ($item) {
             return $item->producto->precio_producto * $item->cantidad_item;
         });
@@ -32,9 +31,7 @@ class CarritoController extends Controller
         return view('Carrito.index', compact('itemsCarrito', 'total'));
     }
 
-    /**
-     *  Agregar un producto al carrito
-     */
+    //Agregar un producto al carrito
     public function agregar($id)
     {
         if (!session()->has('usuario')) {
@@ -46,16 +43,16 @@ class CarritoController extends Controller
 
         //  Buscar SOLO este producto de este usuario
         $item = Carrito::where('rut_usuario', $rut)
-                       ->where('id_producto', $producto->id_producto)
-                       ->first();
+            ->where('id_producto', $producto->id_producto)
+            ->first();
 
         if ($item) {
             //  Incrementar solo este registro (UPDATE explícito)
             Carrito::where('rut_usuario', $rut)
-                   ->where('id_producto', $producto->id_producto)
-                   ->update([
-                       'cantidad_item' => $item->cantidad_item + 1
-                   ]);
+                ->where('id_producto', $producto->id_producto)
+                ->update([
+                    'cantidad_item' => $item->cantidad_item + 1
+                ]);
         } else {
             //  Crear un nuevo registro solo para este producto
             Carrito::create([
@@ -68,9 +65,7 @@ class CarritoController extends Controller
         return redirect()->route('carrito.mostrar');
     }
 
-    /**
-     *  Eliminar un producto específico del carrito
-     */
+    ///Eliminar un producto específico del carrito
     public function eliminar($id)
     {
         if (!session()->has('usuario')) {
@@ -81,8 +76,8 @@ class CarritoController extends Controller
 
         //  Solo elimina el producto indicado del usuario logueado
         Carrito::where('rut_usuario', $rut)
-               ->where('id_producto', $id)
-               ->delete();
+            ->where('id_producto', $id)
+            ->delete();
 
         return redirect()->route('carrito.mostrar');
     }
