@@ -65,8 +65,18 @@
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-1" href="{{ route('ajustes.index') }}">
+                                <span class="material-symbols-outlined">add</span>
+                                Agregar y editar Producto
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- ✅ Ajustes SOLO para Admin --}}
+                    @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-1" href="{{ route('stock.index') }}">
                                 <span class="material-symbols-outlined">inventory</span>
-                                Ajuste de Stock
+                                Ajustar Stock
                             </a>
                         </li>
                     @endif

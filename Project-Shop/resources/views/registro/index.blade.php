@@ -120,7 +120,7 @@
 
                                     <div class="mb-3">
                                         <label for="nuevoRut" class="form-label">Rut Usuario</label>
-                                        <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" placeholder="Ej: 123456789K" pattern="^[0-9]{7,8}[0-9Kk]{1}$" title="Ingrese el RUT sin puntos ni guión. Ejemplo: 123456789K" value="{{ old('nuevoRut') }}" maxlength="9" required>
+                                        <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" placeholder="Ej: 123456789K" autocomplete="off" required>
                                     </div>
                                     
                                     <div class="mb-3">
@@ -155,5 +155,43 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+    function validarRut(rutCompleto) {
+        rutCompleto = rutCompleto.replace(/^0+|[^0-9kK]+/g, ''); // Eliminar ceros iniciales y caracteres no válidos
+        if (rutCompleto.length < 2) return false;
+
+        const cuerpo = rutCompleto.slice(0, -1);
+        const dv = rutCompleto.slice(-1).toUpperCase();
+
+        let suma = 0;
+        let multiplo = 2;
+
+        // Calcular módulo 11
+        for (let i = cuerpo.length - 1; i >= 0; i--) {
+            suma += parseInt(cuerpo.charAt(i)) * multiplo;
+            multiplo = multiplo < 7 ? multiplo + 1 : 2;
+        }
+
+        const resto = suma % 11;
+        const dvEsperado = resto === 1 ? 'K' : resto === 0 ? '0' : (11 - resto).toString();
+
+        return dv === dvEsperado;
+    }
+
+    // Validar al perder el foco del campo
+    document.getElementById("nuevoRut").addEventListener("blur", function() {
+        const rutInput = this.value.trim().toUpperCase();
+
+        if (!validarRut(rutInput)) {
+            this.classList.add("is-invalid");
+            this.classList.remove("is-valid");
+            alert("RUT inválido. Verifica el número y el dígito verificador.");
+        } else {
+            this.classList.remove("is-invalid");
+            this.classList.add("is-valid");
+        }
+    });
+</script>
+
 </body>
 </html>

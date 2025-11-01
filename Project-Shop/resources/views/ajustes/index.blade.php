@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
 
-            {{-- 🔴 MENSAJES DE ERROR GLOBALES --}}
+            {{-- MENSAJES DE ERROR GLOBALES --}}
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                     <ul class="mb-0">
@@ -60,7 +60,7 @@
                                     Editar
                                 </button>
                                 <form action="{{ route('ajustes.eliminar', $producto->id_producto) }}"
-                                      method="POST" style="display:inline;">
+                                        method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -84,12 +84,12 @@
     </div>
 </div>
 
-<!-- 🔵 MODALES DE EDICIÓN -->
+<!-- MODALES DE EDICIÓN -->
 @foreach($productos as $producto)
 <div class="modal fade" id="modalEditar{{ $producto->id_producto }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form class="modal-content" method="POST"
-              action="{{ route('ajustes.actualizar', $producto->id_producto) }}">
+            action="{{ route('ajustes.actualizar', $producto->id_producto) }}">
             @csrf
             @method('PUT')
             <div class="modal-header bg-warning">
@@ -100,17 +100,12 @@
                 <div class="mb-3">
                     <label>Nombre</label>
                     <input type="text" name="nombre_producto" class="form-control"
-                           value="{{ $producto->nombre_producto }}" required>
+                        value="{{ $producto->nombre_producto }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Precio</label>
                     <input type="number" name="precio_producto" class="form-control"
-                           value="{{ $producto->precio_producto }}" required>
-                </div>
-                <div class="mb-3">
-                    <label>Stock</label>
-                    <input type="number" name="stock_real" class="form-control"
-                           value="{{ $producto->stock_real }}" required>
+                        value="{{ $producto->precio_producto }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Estado</label>
@@ -144,7 +139,7 @@
 </div>
 @endforeach
 
-<!-- 🔵 MODAL AGREGAR -->
+<!-- MODAL AGREGAR -->
 <div class="modal fade" id="modalAgregar" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form class="modal-content" method="POST" action="{{ route('ajustes.guardar') }}">
@@ -157,17 +152,18 @@
                 <div class="mb-3">
                     <label>Nombre</label>
                     <input type="text" name="nombre_producto" class="form-control"
-                           value="{{ old('nombre_producto') }}" required>
+                        value="{{ old('nombre_producto') }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Precio</label>
                     <input type="number" name="precio_producto" class="form-control"
-                           value="{{ old('precio_producto') }}" required>
+                        value="{{ old('precio_producto') }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Stock</label>
                     <input type="number" name="stock_real" class="form-control"
-                           value="{{ old('stock_real') }}" required>
+                        value="{{ old('stock_real') }}" 
+                        min="0" max="200" required>
                 </div>
                 <div class="mb-3">
                     <label>Categoría</label>

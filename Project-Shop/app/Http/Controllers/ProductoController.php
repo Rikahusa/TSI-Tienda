@@ -9,9 +9,7 @@ use App\Models\AjusteStock;
 
 class ProductoController extends Controller
 {
-    /**
-     * Muestra la vista principal de ajustes de productos.
-     */
+    //Muestra la vista principal de ajustes de productos
     public function index()
     {
         $productos  = Producto::all();
@@ -20,11 +18,10 @@ class ProductoController extends Controller
         return view('ajustes.index', compact('productos', 'categorias'));
     }
 
-    /**
-     * Guarda un nuevo producto.
-     */
+    //Muestra el formulario para crear un nuevo producto
     public function store(Request $request)
     {
+        // Validar datos
         $request->validate([
             'nombre_producto'      => 'required|string|max:100|unique:productos,nombre_producto',
             'precio_producto'      => 'required|integer|min:0',
@@ -43,17 +40,17 @@ class ProductoController extends Controller
             'estado_producto'      => 'A' // activo por defecto
         ]);
 
+        // Redirigir con mensaje de éxito
         return redirect()->route('ajustes.index')
             ->with('success', ' Producto agregado correctamente.');
     }
 
-    /**
-     * Actualiza un producto existente y registra el ajuste en la tabla ajustes.
-     */
+    //Muestra el formulario para editar un producto existente
     public function update(Request $request, $id)
     {
         $producto = Producto::findOrFail($id);
 
+        // Validar datos
         $request->validate([
             'nombre_producto'      => 'required|string|max:100|unique:productos,nombre_producto,' . $producto->id_producto . ',id_producto',
             'precio_producto'      => 'required|integer|min:0',
@@ -84,7 +81,7 @@ class ProductoController extends Controller
                 'descripcion_ajuste'          => $request->descripcion_producto, // descripción escrita
                 'fecha_modificacion'          => now(),
 
-                // CAMPOS NUEVOS PARA REGISTRO COMPLETO
+                // campos nuevos para registro completo
                 'ajuste_nombre'               => $producto->nombre_producto,
                 'ajuste_precio'               => $producto->precio_producto,
                 'ajuste_descripcion'          => $request->descripcion_producto,
@@ -98,9 +95,7 @@ class ProductoController extends Controller
             ->with('success', ' Producto actualizado correctamente.');
     }
 
-    /**
-     * Elimina un producto.
-     */
+    //Elimina un producto.
     public function destroy($id)
     {
         $producto = Producto::findOrFail($id);

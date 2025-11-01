@@ -5,7 +5,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
-
+use App\Http\Controllers\StockController;
 /*
 |--------------------------------------------------------------------------
 |  Rutas protegidas SOLO para Admin (verificación manual)
@@ -67,6 +67,12 @@ Route::get('/carrito', [CarritoController::class, 'mostrar'])->name('carrito.mos
 Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 
+//testeando el aumento y decremento del carrito
+
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Inicio y Catálogos
@@ -93,3 +99,14 @@ Route::get('/catalogo/fiesta', [CatalogoController::class, 'index'])
 
 Route::get('/catalogo/amigu', [CatalogoController::class, 'index'])
     ->defaults('tipo', 'amigurumis')->name('catalogo.amigurumis');
+
+    /*
+|--------------------------------------------------------------------------
+|  Página principal stock
+|--------------------------------------------------------------------------
+*/
+
+
+
+Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.actualizar');
