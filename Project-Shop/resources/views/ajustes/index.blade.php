@@ -12,6 +12,7 @@
         <div class="card-body">
 
             {{-- MENSAJES DE ERROR GLOBALES --}}
+            {{-- MENSAJES DE ERROR GLOBALES --}}
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                     <ul class="mb-0">
@@ -61,6 +62,7 @@
                                 </button>
                                 <form action="{{ route('ajustes.eliminar', $producto->id_producto) }}"
                                         method="POST" style="display:inline;">
+                                        method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -106,6 +108,12 @@
                     <label>Precio</label>
                     <input type="number" name="precio_producto" class="form-control"
                         value="{{ $producto->precio_producto }}" required>
+                </div>
+                <div class="mb-3">
+                    <label>Stock</label>
+                    <input type="number" name="stock_real" class="form-control"
+                        value="{{ $producto->stock_real }}" min="0" max="200" 
+                        required>
                 </div>
                 <div class="mb-3">
                     <label>Estado</label>
