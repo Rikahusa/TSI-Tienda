@@ -60,7 +60,7 @@
                             Continuar Comprando
                         </a>
                         <div>
-                            <a href="#" class="btn btn-success">
+                            <a href="{{ route('pagos.index') }}" class="btn btn-success">
                                 Proceder al Pago
                             </a>
                         </div>

@@ -125,9 +125,8 @@
                                     
                                     <div class="mb-3">
                                         <label for="nuevaContraseña" class="form-label">Contraseña</label>
-                                        <input type="password" class="form-control" name="nuevaContraseña" id="nuevaContraseña" maxlength="30" required>
+                                        <input type="password" class="form-control" name="nuevaContraseña" id="nuevaContraseña" maxlength="30" autocomplete="off" required>
                                     </div>
-                                    
                                     <div class="mb-3">
                                         <label class="form-label">Tipo de usuario</label>
                                         <div class="form-check">

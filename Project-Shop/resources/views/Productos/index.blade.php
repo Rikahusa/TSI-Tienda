@@ -5,7 +5,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4 ">
             <!-- Ofertas de productos destacados -->
             <div class="col">
-                <img src="{{ asset('images/oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
+                <img src="{{ asset('images/Oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
                 <div class="card h-100">
                     <img src="{{ asset('images/Amiguri.png')}}" class="card-img-top" alt="Amigurumi">
                     <div class="card-body">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="col">
-                <img src="{{ asset('images/oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
+                <img src="{{ asset('images/Oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
                 <div class="card h-100">
                     <img src="{{ asset('images/Sueter.png')}}" class="card-img-top" alt="Sueter de Lana">
                     <div class="card-body">
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="col">
-                <img src="{{ asset('images/oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
+                <img src="{{ asset('images/Oferta.png')}}" alt="Oferta" class="position-absolute top-5" style="width:120px; z-index:10;">
                 <div class="card h-100">
                     <img src="{{ asset('images/Fiestas.png')}}" class="card-img-top" alt="Fiestas">
                     <div class="card-body">

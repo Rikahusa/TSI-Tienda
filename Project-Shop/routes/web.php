@@ -67,10 +67,21 @@ Route::get('/carrito', [CarritoController::class, 'mostrar'])->name('carrito.mos
 Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 
+
 //testeando el aumento y decremento del carrito
 
 
 
+
+/*
+|---------------------------------------------------------------------------
+| Zona de pagos
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/pagos', function () {
+    return view('pagos.index');
+})->name('pagos.index');
 
 
 /*

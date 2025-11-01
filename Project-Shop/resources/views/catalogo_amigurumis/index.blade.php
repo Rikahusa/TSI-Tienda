@@ -5,13 +5,13 @@
     <h1 class="text-center mb-4">Catálogo de Amigurumis</h1>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {{-- ✅ Productos dinámicos (de la base de datos) --}}
+        {{-- Productos dinámicos (de la base de datos) --}}
         @forelse($productos as $producto)
             <div class="col">
                 <div class="card h-100">
                     <img src="{{ asset('images/' . $producto->imagen_producto) }}"
-                         class="card-img-top"
-                         alt="{{ $producto->nombre_producto }}">
+                        class="card-img-top"
+                        alt="{{ $producto->nombre_producto }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $producto->nombre_producto }}</h5>
                         <p class="card-text">{{ $producto->descripcion_producto }}</p>

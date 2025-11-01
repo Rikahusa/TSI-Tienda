@@ -51,12 +51,12 @@
                             
                             <div class="mb-3">
                                 <label for="Rut" class="form-label">RUT Usuario</label>
-                                <input type="text" class="form-control" id="Rut" name="Rut" value="{{ old('Rut') }}" required maxlength="9">
+                                <input type="text" class="form-control" id="Rut" name="Rut" value="{{ old('Rut') }}" required maxlength="9" autocomplete="off">
                             </div>
 
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" name="password" id="password" required>
+                                <input type="password" class="form-control" name="password" id="password" autocomplete="off" required>
                             </div>
                             
                             <div class="mb-3 text-center">

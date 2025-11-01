@@ -12,7 +12,6 @@
         <div class="card-body">
 
             {{-- MENSAJES DE ERROR GLOBALES --}}
-            {{-- MENSAJES DE ERROR GLOBALES --}}
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
                     <ul class="mb-0">
@@ -61,7 +60,6 @@
                                     Editar
                                 </button>
                                 <form action="{{ route('ajustes.eliminar', $producto->id_producto) }}"
-                                        method="POST" style="display:inline;">
                                         method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
