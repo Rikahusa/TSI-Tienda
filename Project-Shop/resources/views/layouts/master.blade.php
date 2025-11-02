@@ -71,7 +71,7 @@
                         </li>
                     @endif
 
-                    {{-- ✅ Ajustes SOLO para Admin --}}
+                    {{-- ✅ stock SOLO para Admin --}}
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-1" href="{{ route('stock.index') }}">
@@ -80,6 +80,7 @@
                             </a>
                         </li>
                     @endif
+                    
 
                     {{-- ✅ Mostrar solo si SÍ hay sesión (logout) --}}
                     @if(session()->has('usuario'))

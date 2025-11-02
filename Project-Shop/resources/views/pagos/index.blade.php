@@ -109,6 +109,12 @@
             <div class="text-center mt-4">
                 <button class="btn btn-lg btn-primary px-5">Confirmar Pedido</button>
             </div>
+             <div class="text-center mt-4">
+                <a href="{{ route('carrito.mostrar') }}" class="btn btn-lg btn-danger px-5">
+                Volver al carrito
+                </a>
+            </div>
+
         </div>
     </div>
 </div>

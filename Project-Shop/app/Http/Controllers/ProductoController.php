@@ -45,7 +45,8 @@ class ProductoController extends Controller
             ->with('success', ' Producto agregado correctamente.');
     }
 
-    //Muestra el formulario para editar un producto existente
+    
+    // Actualiza un producto existente
     public function update(Request $request, $id)
     {
         $producto = Producto::findOrFail($id);
@@ -60,9 +61,7 @@ class ProductoController extends Controller
             'estado_producto'      => 'required|in:A,I'
         ]);
 
-        $stockAnterior = $producto->stock_real;
-
-        //  Actualizar producto
+        // Actualizar producto
         $producto->update([
             'nombre_producto'      => $request->nombre_producto,
             'precio_producto'      => $request->precio_producto,
@@ -72,28 +71,21 @@ class ProductoController extends Controller
             'estado_producto'      => $request->estado_producto
         ]);
 
-        // Registrar ajuste siempre que haya usuario en sesión
+        // Registrar ajuste solo con los campos que existen en la tabla ajustes
         if (session()->has('usuario')) {
             AjusteStock::create([
-                'id_producto'                 => $producto->id_producto,
-                'rut_usuario'                 => session('usuario')['rut_usuario'],
-                'cantidad_ajuste'             => $request->stock_real, // ahora guarda el valor correcto
-                'descripcion_ajuste'          => $request->descripcion_producto, // descripción escrita
-                'fecha_modificacion'          => now(),
-
-                // campos nuevos para registro completo
-                'ajuste_nombre'               => $producto->nombre_producto,
-                'ajuste_precio'               => $producto->precio_producto,
-                'ajuste_descripcion'          => $request->descripcion_producto,
-                'ajuste_estado'               => $producto->estado_producto,
-                'ajuste_stock_real'           => $producto->stock_real,
-                'ajuste_stock_minimo'         => $producto->stock_minimo,
+                'id_producto'        => $producto->id_producto,
+                'rut_usuario'        => session('usuario')['rut_usuario'],
+                'ajuste_estado'      => $producto->estado_producto,
+                'fecha_modificacion' => now(),
             ]);
         }
 
         return redirect()->route('ajustes.index')
-            ->with('success', ' Producto actualizado correctamente.');
+            ->with('success', 'Producto actualizado correctamente.');
     }
+
+
 
     //Elimina un producto.
     public function destroy($id)

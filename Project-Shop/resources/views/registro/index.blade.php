@@ -120,7 +120,7 @@
 
                                     <div class="mb-3">
                                         <label for="nuevoRut" class="form-label">Rut Usuario</label>
-                                        <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" placeholder="Ej: 123456789K" autocomplete="off" required>
+                                        <input type="text" class="form-control" id="nuevoRut" name="nuevoRut" placeholder="Ej: 123456789K" autocomplete="off" required maxlength="9" required>
                                     </div>
                                     
                                     <div class="mb-3">

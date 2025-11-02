@@ -107,12 +107,10 @@
                     <input type="number" name="precio_producto" class="form-control"
                         value="{{ $producto->precio_producto }}" required>
                 </div>
-                <div class="mb-3">
-                    <label>Stock</label>
-                    <input type="number" name="stock_real" class="form-control"
-                        value="{{ $producto->stock_real }}" min="0" max="200" 
-                        required>
-                </div>
+
+                {{-- Campo de stock oculto --}}
+                <input type="hidden" name="stock_real" value="{{ $producto->stock_real }}">
+
                 <div class="mb-3">
                     <label>Estado</label>
                     <select name="estado_producto" class="form-control" required>

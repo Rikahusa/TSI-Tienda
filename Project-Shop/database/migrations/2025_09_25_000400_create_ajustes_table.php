@@ -11,15 +11,15 @@ return new class extends Migration
         Schema::create('ajustes', function (Blueprint $table) {
             $table->smallIncrements('id_stock'); // PK smallint auto_increment
             $table->tinyInteger('id_producto')->unsigned(); // FK Producto
-            $table->string('ajuste_nombre', 60)->nullable();
-            $table->float('ajuste_precio')->nullable();
-            $table->string('ajuste_descripcion', 100)->nullable();
+            //$table->string('ajuste_nombre', 60)->nullable();
+            //$table->float('ajuste_precio')->nullable();
+            //$table->string('ajuste_descripcion', 100)->nullable();
             $table->char('ajuste_estado', 1)->nullable();
-            $table->tinyInteger('ajuste_stock_real')->unsigned()->default(0);
-            $table->tinyInteger('ajuste_stock_minimo')->unsigned()->default(0);
+            //$table->tinyInteger('ajuste_stock_real')->unsigned()->default(0);
+            //$table->tinyInteger('ajuste_stock_minimo')->unsigned()->default(0);
             $table->string('rut_usuario', 10);             // FK Usuario
-            $table->tinyInteger('cantidad_ajuste')->unsigned();
-            $table->string('descripcion_ajuste', 100);
+            //$table->tinyInteger('cantidad_ajuste')->unsigned();
+            //$table->string('descripcion_ajuste', 100);
             $table->timestamp('fecha_modificacion')->useCurrent();
 
             // 🔗 Claves foráneas
