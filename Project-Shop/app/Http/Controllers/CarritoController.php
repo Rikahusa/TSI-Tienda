@@ -81,4 +81,28 @@ class CarritoController extends Controller
 
         return redirect()->route('carrito.mostrar');
     }
+
+    // Actualizar cantidad de un producto específico
+public function actualizar(Request $request, $id)
+{
+    if (!session()->has('usuario')) {
+        return redirect('/login')->withErrors(['msg' => 'Debes iniciar sesión.']);
+    }
+
+    $rut = session('usuario.rut_usuario');
+    $nuevaCantidad = (int) $request->input('cantidad_item');
+
+    // Validar que la cantidad sea positiva
+    if ($nuevaCantidad < 1) {
+        return redirect()->back()->withErrors(['msg' => 'La cantidad debe ser al menos 1.']);
+    }
+
+    // Solo actualizar la fila correspondiente a este usuario y producto
+    Carrito::where('rut_usuario', $rut)
+        ->where('id_producto', $id)
+        ->update(['cantidad_item' => $nuevaCantidad]);
+
+    return redirect()->route('carrito.mostrar')->with('success', 'Cantidad actualizada correctamente.');
+}
+
 }
