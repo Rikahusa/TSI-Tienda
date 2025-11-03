@@ -3,12 +3,23 @@
 @section('contenido-principal')
 <div class="container my-5">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h1 class="card-title mb-0">Ajuste de Productos</h1>
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h1 class="card-title mb-0">Ajuste de Productos</h1>
+
+        <div class="d-flex align-items-center">
+            <select id="filtroCategoria" class="form-select form-select-sm me-2" style="width: 180px;">
+                <option value="todas">Todas las categorías</option>
+                @foreach($categorias as $cat)
+                    <option value="{{ $cat->nombre_categoria }}">{{ $cat->nombre_categoria }}</option>
+                @endforeach
+            </select>
+
             <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregar">
                 + Agregar Producto
             </button>
         </div>
+    </div>
+
         <div class="card-body">
 
             {{-- MENSAJES DE ERROR GLOBALES --}}
@@ -192,4 +203,24 @@
         </form>
     </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filtro = document.getElementById('filtroCategoria');
+    const filas = document.querySelectorAll('table tbody tr');
+
+    filtro.addEventListener('change', function() {
+        const categoriaSeleccionada = this.value;
+
+        filas.forEach(fila => {
+            const categoria = fila.querySelector('td:nth-child(6)').textContent.trim();
+
+            if (categoriaSeleccionada === 'todas' || categoria === categoriaSeleccionada) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
 @endsection
