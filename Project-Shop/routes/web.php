@@ -76,13 +76,16 @@ Route::put('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar'])
 
 /*
 |---------------------------------------------------------------------------
-| Zona de pagos
+| Zona de pagos y Confirmaciones
 |--------------------------------------------------------------------------
 */
 
 Route::get('/pagos', function () {
     return view('pagos.index');
 })->name('pagos.index');
+Route::get('/confirmar', function () {
+    return view('confirmar.index');
+})->name('pagos.confirmar');
 
 
 /*

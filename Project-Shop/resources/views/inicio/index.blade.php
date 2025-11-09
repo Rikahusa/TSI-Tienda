@@ -4,7 +4,7 @@
     <div class="container text-center mt-5">
         <h1 class="display-4">Bienvenidos a Vivi Luna</h1>
         <p class="lead">Tu tienda en línea de confianza</p>
-        <a href="" class="btn btn-primary btn-lg">Explorar Productos</a>
+        <a href="{{ route('productos.index') }}" class="btn btn-primary btn-lg">Explorar Productos</a>
     </div>
     <div id="CarouselInicial" class="carousel slide mt-5" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -49,9 +49,7 @@
                     <img src="{{ asset('images/Amiguri.png')}}" class="card-img-top" alt="Producto 1">
                     <div class="card-body">
                         <h5 class="card-title">Amigurumi Fungi</h5>
-                        Descripcion del Amigurumi del reino Fungi
                         <p class="card-text">Este Amigurumi tejido con lana del reino Fungi, muy bueno para los joven y niños.</p>
-                        <a href="#" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
             </div>
@@ -60,9 +58,7 @@
                     <img src="{{ asset('images/Falda.png')}}" class="card-img-top" alt="Producto 2">
                     <div class="card-body">
                         <h5 class="card-title">Falda de lana</h5>
-                        Descripcion de la Falda de lana
                         <p class="card-text">Esta falda muy comoda y tejida a mano para el uso de mujeres jovenes</p>
-                        <a href="#" class="btn btn-primary">Ver Detalles</a>
                     </div>
                 </div>
             </div>
@@ -71,9 +67,7 @@
                     <img src="{{ asset('images/amigurumi_2.png')}}" class="card-img-top" alt="Producto 3">
                     <div class="card-body">
                         <h5 class="card-title">Amigurumi de Baby Groot</h5>
-                        Descripcion del Amigurumi de Baby Groot
-                        <p class="card-text">Este amigurumi es muy inspirado del alien Groot, en especial en su versión "Baby", que sale en las pelicula de Marvel, en especial la saga de "Guardianes de la Galaxia"</p>
-                        <a href="#" class="btn btn-primary">Ver Detalles</a>
+                        <p class="card-text">Este amigurumi esta inspirado del alien Groot, en especial en su versión "Baby", que sale en las pelicula de Marvel, en especial la saga de "Guardianes de la Galaxia"</p>
                     </div>
                 </div>
             </div>

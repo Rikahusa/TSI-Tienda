@@ -2,7 +2,7 @@
 
 @section('contenido-principal')
 <div class="container my-5">
-    <h1 class="text-center mb-4">Pago de tu Compra</h1>
+    <h1 class="text-center mb-4">Confirmación de su compra</h1>
 
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -52,15 +52,23 @@
                 </div>
                 <div class="card-body">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="tipoEntrega" id="retiroTienda" value="tienda" checked>
+                        <input class="form-check-input" type="radio" name="tipoEntrega" id="retiroTienda" value="tienda">
                         <label class="form-check-label" for="retiroTienda">Retiro en tienda</label>
+                    </div>
+                    <div id="datosRetiro" class="mt-4" style="display: none;">
+                        <h6 class="text-primary mb-3">Datos para Retiro</h6>
+                        <p class="mb-1"><strong>Region:</strong> Valparaiso</p>
+                        <p class="mb-1"><strong>Ciudad:</strong> Viña del Mar</p>
+                        <p class="mb-1"><strong>Comuna:</strong> Gomez Carreño</p>
+                        <p class="mb-1"><strong>Calle:</strong> Av. Los Pinos 1234</p>
+                        <p class="mb-1"><strong>Descripcion del domicilio:</strong> Casa roja con portón negro y de dos pisos</p>
                     </div>
                     <div class="form-check mt-2">
                         <input class="form-check-input" type="radio" name="tipoEntrega" id="delivery" value="delivery">
                         <label class="form-check-label" for="delivery">Despacho a domicilio</label>
                     </div>
 
-                    {{-- Formulario de dirección (oculto hasta que elija delivery) --}}
+                    {{-- Formulario de dirección --}}
                     <div id="direccionForm" class="mt-4" style="display: none;">
                         <h6 class="text-primary mb-3">Dirección de entrega</h6>
                         <div class="mb-3">
@@ -86,7 +94,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="metodoPago" id="efectivo" value="efectivo" checked>
+                        <input class="form-check-input" type="radio" name="metodoPago" id="efectivo" value="efectivo">
                         <label class="form-check-label" for="efectivo">Pago en efectivo</label>
                     </div>
                     <div class="form-check mt-2">
@@ -94,7 +102,7 @@
                         <label class="form-check-label" for="transferencia">Transferencia bancaria</label>
                     </div>
 
-                    {{-- Datos bancarios (solo si selecciona transferencia) --}}
+                    {{-- Datos bancarios --}}
                     <div id="datosTransferencia" class="mt-4" style="display: none;">
                         <h6 class="text-primary mb-3">Datos para Transferencia</h6>
                         <p class="mb-1"><strong>Banco:</strong> Banco Estado</p>
@@ -106,15 +114,30 @@
                 </div>
             </div>
 
+            {{-- Botones --}}
             <div class="text-center mt-4">
-                <button class="btn btn-lg btn-primary px-5">Confirmar Pedido</button>
+                <button id="btnConfirmarPedido" class="btn btn-lg btn-primary px-5">Confirmar Pedido</button>
             </div>
-             <div class="text-center mt-4">
-                <a href="{{ route('carrito.mostrar') }}" class="btn btn-lg btn-danger px-5">
-                Volver al carrito
-                </a>
+            <div class="text-center mt-4">
+                <a href="{{ route('carrito.mostrar') }}" class="btn btn-lg btn-danger px-5">Volver al carrito</a>
             </div>
+        </div>
+    </div>
+</div>
 
+{{-- Modal de confirmación --}}
+<div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="confirmacionModalLabel">¡Pago Confirmado!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h4>Gracias por su compra.</h4>
+                <p>Su pedido tendrá un lapso de 3 a 5 días para que se concrete el pago.</p>
+                <a href="{{ route('inicio.index') }}" class="btn btn-primary mt-3">Volver al Inicio</a>
+            </div>
         </div>
     </div>
 </div>
@@ -124,19 +147,40 @@
     <p>Desarrollado por <a href="#" class="text-white">Alvarado-Espinoza</a></p>
 </footer>
 
-{{-- Scripts para mostrar u ocultar secciones --}}
+{{-- Scripts --}}
 <script>
     const retiroTienda = document.getElementById('retiroTienda');
     const delivery = document.getElementById('delivery');
     const direccionForm = document.getElementById('direccionForm');
+    const datosRetiro = document.getElementById('datosRetiro');
     const efectivo = document.getElementById('efectivo');
     const transferencia = document.getElementById('transferencia');
     const datosTransferencia = document.getElementById('datosTransferencia');
 
-    retiroTienda.addEventListener('change', () => direccionForm.style.display = 'none');
-    delivery.addEventListener('change', () => direccionForm.style.display = 'block');
+    // Mostrar y ocultar los formularios de entrega
+    retiroTienda.addEventListener('change', () => {
+        direccionForm.style.display = 'none';
+        datosRetiro.style.display = 'block';
+    });
 
-    efectivo.addEventListener('change', () => datosTransferencia.style.display = 'none');
-    transferencia.addEventListener('change', () => datosTransferencia.style.display = 'block');
+    delivery.addEventListener('change', () => {
+        direccionForm.style.display = 'block';
+        datosRetiro.style.display = 'none';
+    });
+
+    // Mostrar y ocultar los datos de transferencia bancaria
+    efectivo.addEventListener('change', () => {
+        datosTransferencia.style.display = 'none';
+    });
+
+    transferencia.addEventListener('change', () => {
+        datosTransferencia.style.display = 'block';
+    });
+
+    // Mostrar modal de confirmación
+    document.getElementById('btnConfirmarPedido').addEventListener('click', () => {
+        const modal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
+        modal.show();
+    });
 </script>
 @endsection
