@@ -40,7 +40,12 @@
                     <thead class="table-dark">
                         <tr>
                             <th width="5%">#</th>
-                            <th width="20%">Nombre</th>
+                            <th width="20%" id="ordenarNombre" style="cursor: pointer;">
+                                Nombre 
+                                <span id="iconoOrden" class="ms-1">
+                                    <i class="bi bi-arrow-down-up"></i>
+                                </span>
+                            </th>
                             <th width="15%">Precio</th>
                             <th width="10%">Stock</th>
                             <th width="15%">Estado</th>
@@ -205,6 +210,7 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // === FILTRO POR CATEGORÍA (ya existente) ===
     const filtro = document.getElementById('filtroCategoria');
     const filas = document.querySelectorAll('table tbody tr');
 
@@ -213,14 +219,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
         filas.forEach(fila => {
             const categoria = fila.querySelector('td:nth-child(6)').textContent.trim();
-
-            if (categoriaSeleccionada === 'todas' || categoria === categoriaSeleccionada) {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
+            fila.style.display = (categoriaSeleccionada === 'todas' || categoria === categoriaSeleccionada) ? '' : 'none';
         });
+    });
+
+    // === ORDENAR POR NOMBRE ===
+    const thNombre = document.getElementById('ordenarNombre');
+    const icono = document.getElementById('iconoOrden').querySelector('i');
+    const tbody = document.querySelector('table tbody');
+    let estadoOrden = 0; // 0 = sin orden, 1 = ascendente, 2 = descendente
+
+    const filasOriginales = Array.from(tbody.querySelectorAll('tr')); // Guardar orden original
+
+    thNombre.addEventListener('click', () => {
+        const filas = Array.from(tbody.querySelectorAll('tr'));
+        let nuevasFilas;
+
+        if (estadoOrden === 0) {
+            // Orden ascendente A → Z
+            nuevasFilas = filas.sort((a, b) => {
+                const nombreA = a.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                const nombreB = b.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                return nombreA.localeCompare(nombreB);
+            });
+            icono.className = 'bi bi-arrow-down-short';
+            estadoOrden = 1;
+
+        } else if (estadoOrden === 1) {
+            // Orden descendente Z → A
+            nuevasFilas = filas.sort((a, b) => {
+                const nombreA = a.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                const nombreB = b.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                return nombreB.localeCompare(nombreA);
+            });
+            icono.className = 'bi bi-arrow-up-short';
+            estadoOrden = 2;
+
+        } else {
+            // Volver al orden original
+            nuevasFilas = filasOriginales;
+            icono.className = 'bi bi-arrow-down-up';
+            estadoOrden = 0;
+        }
+
+        // Limpiar y volver a insertar las filas ordenadas
+        tbody.innerHTML = '';
+        nuevasFilas.forEach(f => tbody.appendChild(f));
     });
 });
 </script>
+
 @endsection

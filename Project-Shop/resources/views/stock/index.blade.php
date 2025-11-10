@@ -3,9 +3,20 @@
 @section('contenido-principal')
 <div class="container my-5">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h1 class="card-title mb-0">Editar Stock</h1>
+
+            <div class="d-flex align-items-center">
+                <select id="filtroCategoriaStock" class="form-select form-select-sm me-2" style="width: 180px;">
+                    <option value="todas">Todas las categorías</option>
+                    @foreach($categorias as $cat)
+                        <option value="{{ $cat->nombre_categoria }}">{{ $cat->nombre_categoria }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
+
+
 
         <div class="card-body">
 
@@ -28,7 +39,12 @@
                     <thead class="table-dark">
                         <tr>
                             <th width="5%">#</th>
-                            <th width="25%">Nombre</th>
+                            <th width="25%" id="ordenarNombreStock" style="cursor: pointer;">
+                                Nombre
+                                <span id="iconoOrdenStock" class="ms-1">
+                                    <i class="bi bi-arrow-down-up"></i>
+                                </span>
+                            </th>
                             <th width="15%">Precio</th>
                             <th width="10%">Stock</th>
                             <th width="20%">Categoría</th>
@@ -103,4 +119,66 @@
     </div>
 </div>
 @endforeach
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // === FILTRO DE CATEGORÍAS ===
+    const filtro = document.getElementById('filtroCategoriaStock');
+    const filas = document.querySelectorAll('table tbody tr');
+
+    filtro.addEventListener('change', function() {
+        const categoriaSeleccionada = this.value.trim();
+
+        filas.forEach(fila => {
+            const categoria = fila.querySelector('td:nth-child(5)').textContent.trim();
+            fila.style.display = (categoriaSeleccionada === 'todas' || categoria === categoriaSeleccionada) ? '' : 'none';
+        });
+    });
+
+    // === ORDENAR POR NOMBRE ===
+    const thNombre = document.getElementById('ordenarNombreStock');
+    const icono = document.getElementById('iconoOrdenStock').querySelector('i');
+    const tbody = document.querySelector('table tbody');
+    let estadoOrden = 0; // 0 = sin orden, 1 = ascendente, 2 = descendente
+
+    const filasOriginales = Array.from(tbody.querySelectorAll('tr')); // Guarda el orden original
+
+    thNombre.addEventListener('click', () => {
+        const filas = Array.from(tbody.querySelectorAll('tr'));
+        let nuevasFilas;
+
+        if (estadoOrden === 0) {
+            // Orden ascendente A → Z
+            nuevasFilas = filas.sort((a, b) => {
+                const nombreA = a.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                const nombreB = b.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                return nombreA.localeCompare(nombreB);
+            });
+            icono.className = 'bi bi-arrow-down-short';
+            estadoOrden = 1;
+
+        } else if (estadoOrden === 1) {
+            // Orden descendente Z → A
+            nuevasFilas = filas.sort((a, b) => {
+                const nombreA = a.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                const nombreB = b.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
+                return nombreB.localeCompare(nombreA);
+            });
+            icono.className = 'bi bi-arrow-up-short';
+            estadoOrden = 2;
+
+        } else {
+            // Restablecer orden original
+            nuevasFilas = filasOriginales;
+            icono.className = 'bi bi-arrow-down-up';
+            estadoOrden = 0;
+        }
+
+        // Limpiar y volver a insertar las filas ordenadas
+        tbody.innerHTML = '';
+        nuevasFilas.forEach(f => tbody.appendChild(f));
+    });
+});
+</script>
+
+
 @endsection
