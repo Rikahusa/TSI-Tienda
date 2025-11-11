@@ -27,7 +27,16 @@
                                         <td class="text-center">{{ $index + 1 }}</td>
                                         <td>{{ $item->producto->nombre_producto }}</td>
                                         <td>${{ number_format($item->producto->precio_producto, 0, ',', '.') }}</td>
-                                        <td class="text-center">{{ $item->cantidad_item }}</td>
+                                        <td class="text-center">
+                                            <form action="{{ route('carrito.actualizar', $item->id_producto) }}" method="POST" class="d-flex justify-content-center align-items-center">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="number" name="cantidad_item" value="{{ $item->cantidad_item }}" min="1" class="form-control form-control-sm text-center" style="width: 70px;">
+                                                <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                                                    <span class="material-icons">Actualizar</span>
+                                                </button>
+                                            </form>
+                                        </td>
                                         <td>
                                             ${{ number_format($item->producto->precio_producto * $item->cantidad_item, 0, ',', '.') }}
                                         </td>

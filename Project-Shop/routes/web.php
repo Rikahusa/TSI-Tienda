@@ -66,6 +66,7 @@ Route::get('/productos', function () {
 Route::get('/carrito', [CarritoController::class, 'mostrar'])->name('carrito.mostrar');
 Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+Route::put('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
 
 
 //testeando el aumento y decremento del carrito
@@ -75,13 +76,16 @@ Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])-
 
 /*
 |---------------------------------------------------------------------------
-| Zona de pagos
+| Zona de pagos y Confirmaciones
 |--------------------------------------------------------------------------
 */
 
 Route::get('/pagos', function () {
     return view('pagos.index');
 })->name('pagos.index');
+Route::get('/confirmar', function () {
+    return view('confirmar.index');
+})->name('pagos.confirmar');
 
 
 /*
@@ -121,3 +125,7 @@ Route::get('/catalogo/amigu', [CatalogoController::class, 'index'])
 
 Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
 Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.actualizar');
+
+
+
+Route::get('/pagos', [App\Http\Controllers\CarritoController::class, 'mostrarPago'])->name('pagos.index');

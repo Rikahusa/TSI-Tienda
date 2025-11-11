@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <title>Vivi Luna - Tienda</title>
 </head>
 <body style="background-image: url({{ asset('images/lanita.png') }}); 
@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
                 <ul class="navbar-nav">
 
-                    {{-- ✅ Mostrar solo si NO hay sesión --}}
+                    {{-- Mostrar solo si NO hay sesión --}}
                     @if(!session()->has('usuario'))
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-1" href="{{ route('login') }}">
@@ -61,7 +61,17 @@
                         </a>
                     </li>
 
-                    {{-- ✅ Ajustes SOLO para Admin --}}
+                    {{-- Concretar pagos --}}
+                    @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-1" href="{{ route('pagos.confirmar') }}">
+                                <span class="material-symbols-outlined">payment</span>
+                                Concretar Pagos
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- Ajustes SOLO para Admin --}}
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-1" href="{{ route('ajustes.index') }}">
@@ -71,7 +81,7 @@
                         </li>
                     @endif
 
-                    {{-- ✅ stock SOLO para Admin --}}
+                    {{-- stock SOLO para Admin --}}
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-1" href="{{ route('stock.index') }}">
@@ -82,7 +92,7 @@
                     @endif
                     
 
-                    {{-- ✅ Mostrar solo si SÍ hay sesión (logout) --}}
+                    {{-- Mostrar solo si SÍ hay sesión (logout) --}}
                     @if(session()->has('usuario'))
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
@@ -101,7 +111,7 @@
         </div>
     </nav> 
 
-    {{-- ✅ Contenido principal de cada vista --}}
+    {{-- Contenido principal de cada vista --}}
     <div class="container mt-4">
         @yield('contenido-principal')
     </div>

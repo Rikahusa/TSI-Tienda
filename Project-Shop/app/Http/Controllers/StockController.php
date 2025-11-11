@@ -45,6 +45,6 @@ class StockController extends Controller
         ]);
 
         return redirect()->route('stock.index')
-                         ->with('success', 'Stock actualizado y registrado correctamente.');
+                        ->with('success', 'Stock actualizado y registrado correctamente.');
     }
 }
