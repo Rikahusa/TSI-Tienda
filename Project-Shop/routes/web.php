@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\VentasController;
 /*
 |--------------------------------------------------------------------------
 |  Rutas protegidas SOLO para Admin (verificación manual)
@@ -129,3 +130,11 @@ Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.actua
 
 
 Route::get('/pagos', [App\Http\Controllers\CarritoController::class, 'mostrarPago'])->name('pagos.index');
+
+
+
+// Ruta para confirmar pedido (POST)
+Route::post('/ventas/confirmar', [VentasController::class, 'confirmarPedido'])->name('ventas.confirmar');
+
+// Ruta para mostrar la confirmación (GET)
+Route::get('/ventas/confirmacion', [VentasController::class, 'confirmacion'])->name('pagos.confirmacion');
