@@ -61,10 +61,11 @@
                         </a>
                     </li>
 
-                    {{-- Concretar pagos --}}
+                    {{-- Concretar pagos (solo admin) --}}
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-1" href="{{ route('pagos.confirmar') }}">
+                            {{-- Pasamos 0 para indicar "listar todas las ventas pendientes" --}}
+                            <a class="nav-link d-flex align-items-center gap-1" href="{{ route('pagos.confirmacion', 0) }}">
                                 <span class="material-symbols-outlined">payment</span>
                                 Concretar Pagos
                             </a>
@@ -81,7 +82,7 @@
                         </li>
                     @endif
 
-                    {{-- stock SOLO para Admin --}}
+                    {{-- Stock SOLO para Admin --}}
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-1" href="{{ route('stock.index') }}">
@@ -90,9 +91,8 @@
                             </a>
                         </li>
                     @endif
-                    
 
-                    {{-- Mostrar solo si SÍ hay sesión (logout) --}}
+                    {{-- Mostrar logout si hay sesión --}}
                     @if(session()->has('usuario'))
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
@@ -109,7 +109,8 @@
                 </ul>
             </div>
         </div>
-    </nav> 
+    </nav>
+
 
     {{-- Contenido principal de cada vista --}}
     <div class="container mt-4">

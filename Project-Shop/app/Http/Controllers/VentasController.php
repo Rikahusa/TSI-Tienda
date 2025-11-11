@@ -9,6 +9,7 @@ use App\Models\Carrito;
 
 class VentasController extends Controller
 {
+    // Crear la venta desde el botón “Confirmar Pedido”
     public function confirmarPedido(Request $request)
     {
         if (!session()->has('usuario')) {
@@ -17,20 +18,23 @@ class VentasController extends Controller
 
         $usuario = session('usuario');
         $rut = $usuario['rut_usuario'];
-        $rol = $usuario['rol'] ?? 'usuario'; // asumimos que guardas el rol
+        $rol = $usuario['tipo_usuario'] ?? 'U'; // ⚡ aquí usamos tipo_usuario
 
-        // Obtener productos del carrito del usuario
-        $itemsCarrito = Carrito::where('rut_usuario', $rut)->with('producto')->get();
+        // Obtener productos del carrito
+        $itemsCarrito = Carrito::where('rut_usuario', $rut)
+            ->with('producto')
+            ->get();
 
         if ($itemsCarrito->isEmpty()) {
-            return redirect()->route('carrito.mostrar')->withErrors(['msg' => 'No hay productos en el carrito.']);
+            return redirect()->route('carrito.mostrar')
+                ->withErrors(['msg' => 'No hay productos en el carrito.']);
         }
 
         // Crear encabezado de venta
         $encabezado = EncabezadoVenta::create([
             'rut_usuario' => $rut,
             'fecha_venta' => now(),
-            'estado_venta' => 'P', // pendiente por defecto
+            'estado_venta' => 'P', // Pendiente
         ]);
 
         // Crear detalle de venta
@@ -43,19 +47,65 @@ class VentasController extends Controller
             ]);
         }
 
-        // Diferenciar comportamiento según rol
-        if ($rol === 'admin') {
-            // Admin: redirigir a la vista de confirmación para administración
-            return redirect()->route('pagos.confirmacion')->with('success', 'Pedido registrado correctamente.');
-        } else {
-            // Usuario normal: mostrar modal en la misma página
-            return redirect()->route('carrito.mostrar')->with('modal', 'pedido_confirmado');
+        // Vaciar carrito del usuario
+        Carrito::where('rut_usuario', $rut)->delete();
+
+        // Redirigir al admin a la página de confirmación (ventas pendientes)
+        if ($rol === 'A') {
+            return redirect()->route('pagos.confirmacion', $encabezado->num_venta)
+                ->with('success', 'Pedido registrado correctamente.');
         }
+
+        // Usuario normal: volver al carrito con modal
+        return redirect()->route('carrito.mostrar')
+            ->with('modal', 'pedido_confirmado');
     }
 
-    // Vista de confirmación para administradores
-    public function confirmacion()
+    // Vista de confirmación/ventas pendientes
+    public function confirmacion($num_venta)
     {
-        return view('confirmar.index');
+        // Si $num_venta es 0, listamos todas las ventas pendientes
+        if ($num_venta == 0) {
+            $ventasPendientes = EncabezadoVenta::where('estado_venta', 'P')->get();
+            return view('confirmar.index', compact('ventasPendientes'));
+        }
+
+        $encabezado = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
+
+        // Obtener detalles de la venta
+        $itemsCarrito = DetalleVenta::where('num_venta', $num_venta)
+            ->with('producto')
+            ->get();
+
+        // Calcular total
+        $total = $itemsCarrito->sum(function ($item) {
+            return $item->precio * $item->cantidad_item;
+        });
+
+        $rut = $encabezado->rut_usuario;
+
+        return view('confirmar.index', compact('itemsCarrito', 'total', 'num_venta', 'rut'));
+    }
+
+    // Concretar venta (solo admin)
+    public function concretarVenta($num_venta)
+    {
+        $venta = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
+        $venta->estado_venta = 'C'; // Concretada
+        $venta->save();
+
+        return redirect()->route('pagos.confirmacion', 0)
+            ->with('success', 'Venta concretada correctamente.');
+    }
+
+    // Cancelar venta (solo admin)
+    public function cancelarVenta($num_venta)
+    {
+        $venta = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
+        $venta->estado_venta = 'X'; // Cancelada
+        $venta->save();
+
+        return redirect()->route('pagos.confirmacion', 0)
+            ->with('success', 'Venta cancelada correctamente.');
     }
 }

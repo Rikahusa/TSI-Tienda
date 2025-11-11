@@ -7,13 +7,13 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\VentasController;
+
 /*
 |--------------------------------------------------------------------------
-|  Rutas protegidas SOLO para Admin (verificación manual)
+| Rutas protegidas SOLO para Admin
 |--------------------------------------------------------------------------
 */
 Route::group([], function () {
-    //  Verificación de ADMIN en cada ruta de ajustes
     $verificarAdmin = function () {
         if (!session()->has('usuario') || session('usuario.rol') !== 'Admin') {
             abort(403, 'Acceso denegado.');
@@ -43,7 +43,7 @@ Route::group([], function () {
 
 /*
 |--------------------------------------------------------------------------
-|  Login y Usuarios
+| Login y Usuarios
 |--------------------------------------------------------------------------
 */
 Route::get('/login', function () {
@@ -52,6 +52,7 @@ Route::get('/login', function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/registro', [UsuarioController::class, 'create'])->name('registro.create');
 Route::post('/registro', [UsuarioController::class, 'store'])->name('registro.store');
 
@@ -69,25 +70,24 @@ Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->nam
 Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 Route::put('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
 
-
-//testeando el aumento y decremento del carrito
-
-
-
-
 /*
-|---------------------------------------------------------------------------
+|--------------------------------------------------------------------------
 | Zona de pagos y Confirmaciones
 |--------------------------------------------------------------------------
 */
+// Mostrar la página de pagos
+Route::get('/pagos', [CarritoController::class, 'mostrarPago'])->name('pagos.index');
 
-Route::get('/pagos', function () {
-    return view('pagos.index');
-})->name('pagos.index');
-Route::get('/confirmar', function () {
-    return view('confirmar.index');
-})->name('pagos.confirmar');
+// Confirmar pedido (POST) desde el botón "Confirmar Pedido"
+Route::post('/ventas/confirmar', [VentasController::class, 'confirmarPedido'])->name('ventas.confirmar');
 
+// Vista de ventas pendientes / confirmación para admin
+Route::get('/ventas/confirmacion/{num_venta}', [VentasController::class, 'confirmacion'])
+    ->name('pagos.confirmacion');
+
+// Concretar o cancelar la venta (admin)
+Route::post('/ventas/concretar/{num_venta}', [VentasController::class, 'concretarVenta'])->name('ventas.concretar');
+Route::post('/ventas/cancelar/{num_venta}', [VentasController::class, 'cancelarVenta'])->name('ventas.cancelar');
 
 /*
 |--------------------------------------------------------------------------
@@ -98,15 +98,6 @@ Route::get('/inicio', function () {
     return view('inicio.index');
 })->name('inicio.index');
 
-/*
-|--------------------------------------------------------------------------
-|  Página principal SIEMPRE → Login
-|--------------------------------------------------------------------------
-*/
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
 Route::get('/catalogo/vestidos', [CatalogoController::class, 'index'])
     ->defaults('tipo', 'vestidos')->name('catalogo.vestidos');
 
@@ -116,25 +107,19 @@ Route::get('/catalogo/fiesta', [CatalogoController::class, 'index'])
 Route::get('/catalogo/amigu', [CatalogoController::class, 'index'])
     ->defaults('tipo', 'amigurumis')->name('catalogo.amigurumis');
 
-    /*
+/*
 |--------------------------------------------------------------------------
-|  Página principal stock
+| Página principal stock
 |--------------------------------------------------------------------------
 */
-
-
-
 Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
 Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.actualizar');
 
-
-
-Route::get('/pagos', [App\Http\Controllers\CarritoController::class, 'mostrarPago'])->name('pagos.index');
-
-
-
-// Ruta para confirmar pedido (POST)
-Route::post('/ventas/confirmar', [VentasController::class, 'confirmarPedido'])->name('ventas.confirmar');
-
-// Ruta para mostrar la confirmación (GET)
-Route::get('/ventas/confirmacion', [VentasController::class, 'confirmacion'])->name('pagos.confirmacion');
+/*
+|--------------------------------------------------------------------------
+| Página principal SIEMPRE → Login
+|--------------------------------------------------------------------------
+*/
+Route::get('/', function () {
+    return redirect()->route('login');
+});

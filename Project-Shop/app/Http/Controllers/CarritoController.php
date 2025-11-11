@@ -130,4 +130,6 @@ public function actualizar(Request $request, $id)
     }
 
 
+
+
 }
