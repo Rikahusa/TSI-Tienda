@@ -39,6 +39,7 @@ Route::group([], function () {
         $verificarAdmin();
         return app(ProductoController::class)->destroy($id);
     })->name('ajustes.eliminar');
+    
 });
 
 /*
@@ -114,6 +115,16 @@ Route::get('/catalogo/amigu', [CatalogoController::class, 'index'])
 */
 Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
 Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.actualizar');
+
+/*
+|--------------------------------------------------------------------------
+| Detalle Venta
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/detalle_venta', function () {
+    return view('detalle_venta.index');
+})->name('detalle.index');
 
 /*
 |--------------------------------------------------------------------------

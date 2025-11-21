@@ -92,6 +92,17 @@
                         </li>
                     @endif
 
+                    {{-- detalle ventas SOLO para Admin --}}
+                    @if(session()->has('usuario') && session('usuario.rol') === 'Admin')
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-1" href="{{ route('detalle.index')}}">
+                                <span class="material-symbols-outlined">receipt_long</span>
+                                Detalle de Ventas
+                            </a>
+                        </li>
+                    @endif
+
+
                     {{-- Mostrar logout si hay sesión --}}
                     @if(session()->has('usuario'))
                         <li class="nav-item">
