@@ -10,15 +10,21 @@ use App\Http\Controllers\VentasController;
 
 /*
 |--------------------------------------------------------------------------
-| Rutas protegidas SOLO para Admin
+| Middleware manual para verificar Admin
 |--------------------------------------------------------------------------
 */
-Route::group([], function () {
-    $verificarAdmin = function () {
-        if (!session()->has('usuario') || session('usuario.rol') !== 'Admin') {
-            abort(403, 'Acceso denegado.');
-        }
-    };
+$verificarAdmin = function () {
+    if (!session()->has('usuario') || session('usuario.rol') !== 'Admin') {
+        abort(403, 'Acceso denegado.');
+    }
+};
+
+/*
+|--------------------------------------------------------------------------
+| AJUSTES ---PROTEGIDO--- SOLO ADMIN
+|--------------------------------------------------------------------------
+*/
+Route::group([], function () use ($verificarAdmin) {
 
     Route::get('/ajustes', function () use ($verificarAdmin) {
         $verificarAdmin();
@@ -39,12 +45,12 @@ Route::group([], function () {
         $verificarAdmin();
         return app(ProductoController::class)->destroy($id);
     })->name('ajustes.eliminar');
-    
+
 });
 
 /*
 |--------------------------------------------------------------------------
-| Login y Usuarios
+| LOGIN Y USUARIOS
 |--------------------------------------------------------------------------
 */
 Route::get('/login', function () {
@@ -59,7 +65,7 @@ Route::post('/registro', [UsuarioController::class, 'store'])->name('registro.st
 
 /*
 |--------------------------------------------------------------------------
-| Productos y Carrito
+| PRODUCTOS Y CARRITO
 |--------------------------------------------------------------------------
 */
 Route::get('/productos', function () {
@@ -73,26 +79,36 @@ Route::put('/carrito/actualizar/{id}', [CarritoController::class, 'actualizar'])
 
 /*
 |--------------------------------------------------------------------------
-| Zona de pagos y Confirmaciones
+| PAGOS Y CONFIRMACIONES ---PROTEGIDO--- SOLO ADMIN para confirmaciones internas
 |--------------------------------------------------------------------------
 */
-// Mostrar la página de pagos
+
+// Página normal de pagos (disponible para usuarios)
 Route::get('/pagos', [CarritoController::class, 'mostrarPago'])->name('pagos.index');
 
-// Confirmar pedido (POST) desde el botón "Confirmar Pedido"
+// Confirmar pedido (usuario)
 Route::post('/ventas/confirmar', [VentasController::class, 'confirmarPedido'])->name('ventas.confirmar');
 
-// Vista de ventas pendientes / confirmación para admin
-Route::get('/ventas/confirmacion/{num_venta}', [VentasController::class, 'confirmacion'])
-    ->name('pagos.confirmacion');
+// Confirmación de ventas – ADMIN
+Route::get('/ventas/confirmacion/{num_venta}', function ($num_venta) use ($verificarAdmin) {
+    $verificarAdmin();
+    return app(VentasController::class)->confirmacion($num_venta);
+})->name('pagos.confirmacion');
 
-// Concretar o cancelar la venta (admin)
-Route::post('/ventas/concretar/{num_venta}', [VentasController::class, 'concretarVenta'])->name('ventas.concretar');
-Route::post('/ventas/cancelar/{num_venta}', [VentasController::class, 'cancelarVenta'])->name('ventas.cancelar');
+// Concretar o cancelar venta – ADMIN
+Route::post('/ventas/concretar/{num_venta}', function ($num_venta) use ($verificarAdmin) {
+    $verificarAdmin();
+    return app(VentasController::class)->concretarVenta($num_venta);
+})->name('ventas.concretar');
+
+Route::post('/ventas/cancelar/{num_venta}', function ($num_venta) use ($verificarAdmin) {
+    $verificarAdmin();
+    return app(VentasController::class)->cancelarVenta($num_venta);
+})->name('ventas.cancelar');
 
 /*
 |--------------------------------------------------------------------------
-| Inicio y Catálogos
+| INICIO Y CATÁLOGOS
 |--------------------------------------------------------------------------
 */
 Route::get('/inicio', function () {
@@ -110,25 +126,32 @@ Route::get('/catalogo/amigu', [CatalogoController::class, 'index'])
 
 /*
 |--------------------------------------------------------------------------
-| Página principal stock
+| STOCK ---PROTEGIDO--- SOLO ADMIN
 |--------------------------------------------------------------------------
 */
-Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
-Route::put('/stock/{id}', [StockController::class, 'update'])->name('stock.actualizar');
+Route::get('/stock', function () use ($verificarAdmin) {
+    $verificarAdmin();
+    return app(StockController::class)->index();
+})->name('stock.index');
+
+Route::put('/stock/{id}', function ($id) use ($verificarAdmin) {
+    $verificarAdmin();
+    return app(StockController::class)->update(request(), $id);
+})->name('stock.actualizar');
 
 /*
 |--------------------------------------------------------------------------
-| Detalle Venta
+| DETALLE DE VENTA ---PROTEGIDO--- SOLO ADMIN
 |--------------------------------------------------------------------------
 */
-
-Route::get('/detalle_venta', function () {
+Route::get('/detalle_venta', function () use ($verificarAdmin) {
+    $verificarAdmin();
     return view('detalle_venta.index');
 })->name('detalle.index');
 
 /*
 |--------------------------------------------------------------------------
-| Página principal SIEMPRE → Login
+| ROOT → LOGIN
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
