@@ -15,6 +15,11 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    {{-- Mensajes de error --}}
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
     @if(isset($ventasPendientes) && $ventasPendientes->count() > 0)
         {{-- Vista Admin: Lista todas las ventas pendientes --}}
         @foreach($ventasPendientes as $venta)
@@ -30,6 +35,7 @@
                         $items = $venta->detalles()->with('producto')->get();
                         $total = $items->sum(fn($item) => $item->precio * $item->cantidad_item);
                     @endphp
+
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -61,6 +67,7 @@
                             @csrf
                             <button class="btn btn-success">Sí</button>
                         </form>
+
                         <form action="{{ route('ventas.cancelar', $venta->num_venta) }}" method="POST" class="d-inline">
                             @csrf
                             <button class="btn btn-danger">No</button>
@@ -71,7 +78,7 @@
         @endforeach
 
     @elseif(isset($itemsCarrito) && $itemsCarrito->count() > 0)
-        {{-- Vista Usuario: Confirmación de pedido individual --}}
+        {{-- Vista Usuario: Confirmación de pedido --}}
         <div class="card">
             <div class="card-header bg-success text-white">
                 <div class="row text-center fw-bold">
@@ -106,10 +113,12 @@
                 </table>
             </div>
         </div>
+
     @else
         <div class="alert alert-info">No hay ventas para mostrar.</div>
     @endif
 </div>
+
 <footer class="bg-dark text-white text-center py-3 mt-5">
     <p>&copy; 2025 Vivi Luna. Todos los derechos reservados.</p>
     <p>Desarrollado por <a href="#" class="text-white">Alvarado-Espinoza</a></p>

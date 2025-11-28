@@ -88,15 +88,34 @@ class VentasController extends Controller
     }
 
     // Concretar venta (solo admin)
-    public function concretarVenta($num_venta)
+        public function concretarVenta($num_venta)
     {
         $venta = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
-        $venta->estado_venta = 'C'; // Concretada
+        $detalles = $venta->detalles()->with('producto')->get();
+
+        //  Validar stock
+        foreach ($detalles as $item) {
+            if ($item->producto->stock_real < $item->cantidad_item) {
+                return redirect()->route('pagos.confirmacion', 0)
+                    ->with('error', "No hay stock suficiente de: {$item->producto->nombre_producto}");
+            }
+        }
+
+        //  Descontar stock
+        foreach ($detalles as $item) {
+            $producto = $item->producto;
+            $producto->stock_real -= $item->cantidad_item;
+            $producto->save();
+        }
+
+        // Marcar venta como concretada
+        $venta->estado_venta = 'C';
         $venta->save();
 
         return redirect()->route('pagos.confirmacion', 0)
-            ->with('success', 'Venta concretada correctamente.');
+            ->with('success', 'Venta concretada correctamente y stock actualizado.');
     }
+
 
     // Cancelar venta (solo admin)
     public function cancelarVenta($num_venta)
