@@ -18,6 +18,10 @@ class EncabezadoVenta extends Model
         'fecha_venta',
         'estado_venta',
     ];
+    protected $casts = [
+    'fecha_venta' => 'date',
+    ];
+
 
     // Relación con detalle_ventas
     public function detalles()

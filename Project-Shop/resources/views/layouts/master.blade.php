@@ -60,6 +60,16 @@
                             Carrito
                         </a>
                     </li>
+                    @if(session()->has('usuario') && session('usuario.rol') === 'Usuario')
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center gap-1" 
+                        href="{{ route('pedido.historial') }}">
+                            <span class="material-symbols-outlined">receipt</span>
+                            Mis Pedidos
+                        </a>
+                    </li>
+                    @endif
+
 
                     {{-- Concretar pagos (solo admin) --}}
                     @if(session()->has('usuario') && session('usuario.rol') === 'Admin')

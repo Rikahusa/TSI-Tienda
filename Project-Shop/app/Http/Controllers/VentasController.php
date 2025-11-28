@@ -56,9 +56,12 @@ class VentasController extends Controller
                 ->with('success', 'Pedido registrado correctamente.');
         }
 
-        // Usuario normal: volver al carrito con modal
-        return redirect()->route('carrito.mostrar')
-            ->with('modal', 'pedido_confirmado');
+        // Usuario normal
+        // Usuario normal: ver pantalla de confirmación
+        return redirect()->route('pedido.confirmacion', $encabezado->num_venta)
+        ->with('success', 'Pedido registrado correctamente.');
+
+
     }
 
     // Vista de confirmación/ventas pendientes
@@ -117,14 +120,60 @@ class VentasController extends Controller
     }
 
 
-    // Cancelar venta (solo admin)
-    public function cancelarVenta($num_venta)
-    {
-        $venta = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
-        $venta->estado_venta = 'X'; // Cancelada
-        $venta->save();
+        // Cancelar venta (solo admin)
+        public function cancelarVenta($num_venta)
+        {
+            $venta = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
+            $venta->estado_venta = 'X'; // Cancelada
+            $venta->save();
 
-        return redirect()->route('pagos.confirmacion', 0)
-            ->with('success', 'Venta cancelada correctamente.');
+            return redirect()->route('pagos.confirmacion', 0)
+                ->with('success', 'Venta cancelada correctamente.');
+        }
+
+        public function confirmacionUsuario($num_venta)
+    {
+        $encabezado = EncabezadoVenta::where('num_venta', $num_venta)->firstOrFail();
+
+        $itemsCarrito = $encabezado->detalles()->with('producto')->get();
+
+        $total = $itemsCarrito->sum(fn($item) => $item->precio * $item->cantidad_item);
+
+        return view('confirmar.index', [
+            'itemsCarrito' => $itemsCarrito,
+            'num_venta'    => $encabezado->num_venta,
+            'rut'          => $encabezado->rut_usuario,
+            'total'        => $total
+        ]);
     }
+
+
+
+            public function historialUsuario()
+    {
+        if (!session()->has('usuario')) {
+            return redirect()->route('login');
+        }
+
+        // usar la misma clave de sesión que usas en todo el proyecto
+        $rut = session('usuario.rut_usuario');
+
+        // Traer encabezados del usuario con sus detalles y producto en una sola consulta
+        $ventas = EncabezadoVenta::where('rut_usuario', $rut)
+            ->with(['detalles.producto'])
+            ->orderBy('num_venta', 'desc')
+            ->get();
+
+        // Calculamos total por cada venta (añadimos atributo dinámico total para la vista)
+        $ventas->transform(function ($venta) {
+            $venta->total_calculado = $venta->detalles->sum(function ($d) {
+                return $d->precio * $d->cantidad_item;
+            });
+            return $venta;
+        });
+
+        return view('historial.index', compact('ventas'));
+    }
+
+
 }

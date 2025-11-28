@@ -157,3 +157,17 @@ Route::get('/detalle_venta', function () use ($verificarAdmin) {
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+
+
+
+Route::get('/pedido/confirmacion/{num_venta}', 
+    [VentasController::class, 'confirmacionUsuario'])
+    ->name('pedido.confirmacion');
+
+
+
+
+Route::get('/pedido/historial', 
+    [VentasController::class, 'historialUsuario'])
+    ->name('pedido.historial');
