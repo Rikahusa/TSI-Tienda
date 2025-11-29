@@ -22,28 +22,29 @@
             @endif
 
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover">
+                <table id="tabla-ventas" class="table table-striped table-bordered table-hover">
                     <thead class="table-dark">
                         <tr>
                             <th width="5%">#</th>
-                            <th width="20%">Rut del comprador</th>
-                            <th width="25%" style="cursor: pointer;">
+
+                            <th width="20%" class="sortable" data-col="rut_usuario" style="cursor:pointer;">
+                                Rut del comprador
+                                <i class="bi bi-arrow-down-up ms-1"></i>
+                            </th>
+
+                            <th width="25%" class="sortable" data-col="num_venta" style="cursor:pointer;">
                                 Número del Pedido
-                                <span class="ms-1">
-                                    <i class="bi bi-arrow-down-up"></i>
-                                </span>
+                                <i class="bi bi-arrow-down-up ms-1"></i>
                             </th>
-                            <th width="25%" style="cursor: pointer;">
+
+                            <th width="25%" class="sortable" data-col="total_venta" style="cursor:pointer;">
                                 Precio Total
-                                <span class="ms-1">
-                                    <i class="bi bi-arrow-down-up"></i>
-                                </span>
+                                <i class="bi bi-arrow-down-up ms-1"></i>
                             </th>
-                            <th width="25%" style="cursor: pointer;">
+
+                            <th width="25%" class="sortable" data-col="fecha_venta" style="cursor:pointer;">
                                 Fecha del Pedido
-                                <span class="ms-1">
-                                    <i class="bi bi-arrow-down-up"></i>
-                                </span>
+                                <i class="bi bi-arrow-down-up ms-1"></i>
                             </th>
                         </tr>
                     </thead>
@@ -52,16 +53,10 @@
                         @forelse($ventas as $venta)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $venta->rut_usuario }}</td>
-
-                                {{-- Número de venta --}}
-                                <td>{{ $venta->num_venta }}</td>
-
-                                {{-- Total --}}
-                                <td>${{ number_format($venta->total_venta, 0, ',', '.') }}</td>
-
-                                {{-- Fecha --}}
-                                <td>
+                                <td data-col="rut_usuario">{{ $venta->rut_usuario }}</td>
+                                <td data-col="num_venta">{{ $venta->num_venta }}</td>
+                                <td data-col="total_venta">{{ $venta->total_venta }}</td>
+                                <td data-col="fecha_venta">
                                     {{ \Carbon\Carbon::parse($venta->fecha_venta)->format('d-m-Y') }}
                                 </td>
                             </tr>
@@ -83,4 +78,66 @@
     <p>&copy; 2025 Vivi Luna. Todos los derechos reservados.</p>
     <p>Desarrollado por <a href="#" class="text-white">Alvarado-Espinoza</a></p>
 </footer>
+
+{{-- SCRIPT PARA ORDENAR --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const table = document.getElementById('tabla-ventas');
+    const headers = table.querySelectorAll('.sortable');
+    let sortDirection = 1; // 1 ascendente, -1 descendente
+    let activeColumn = null;
+
+    headers.forEach(header => {
+        header.addEventListener('click', function () {
+
+            const col = this.getAttribute('data-col');
+            const icon = this.querySelector('i');
+
+            if (activeColumn === col) {
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+                activeColumn = col;
+            }
+
+            // Resetear iconos
+            headers.forEach(h => h.querySelector('i').className = 'bi bi-arrow-down-up ms-1');
+
+            // Icono asc / desc
+            icon.className = sortDirection === 1
+                ? 'bi bi-arrow-down-short ms-1'
+                : 'bi bi-arrow-up-short ms-1';
+
+            const rows = Array.from(table.querySelector('tbody').querySelectorAll('tr'));
+
+            rows.sort((a, b) => {
+                let A = a.querySelector(`[data-col="${col}"]`).innerText.trim();
+                let B = b.querySelector(`[data-col="${col}"]`).innerText.trim();
+
+                // Detectar números
+                if (!isNaN(A) && !isNaN(B)) {
+                    return sortDirection * (Number(A) - Number(B));
+                }
+
+                // Detectar fechas (dd-mm-yyyy)
+                const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+                if (dateRegex.test(A) && dateRegex.test(B)) {
+                    const dateA = new Date(A.split('-').reverse().join('-'));
+                    const dateB = new Date(B.split('-').reverse().join('-'));
+                    return sortDirection * (dateA - dateB);
+                }
+
+                // Texto normal
+                return sortDirection * A.localeCompare(B);
+            });
+
+            // Insertar filas ordenadas
+            const tbody = table.querySelector('tbody');
+            rows.forEach(row => tbody.appendChild(row));
+        });
+    });
+});
+</script>
+
 @endsection
