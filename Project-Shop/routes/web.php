@@ -146,8 +146,9 @@ Route::put('/stock/{id}', function ($id) use ($verificarAdmin) {
 */
 Route::get('/detalle_venta', function () use ($verificarAdmin) {
     $verificarAdmin();
-    return view('detalle_venta.index');
+    return app(VentasController::class)->mostrarVentasAdmin();
 })->name('detalle.index');
+
 
 /*
 |--------------------------------------------------------------------------

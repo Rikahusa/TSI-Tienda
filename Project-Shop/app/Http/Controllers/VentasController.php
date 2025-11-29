@@ -176,4 +176,29 @@ class VentasController extends Controller
     }
 
 
+        public function mostrarVentasAdmin()
+    {
+        // Validación admin
+        if (!session()->has('usuario') || session('usuario.rol') !== 'Admin') {
+            abort(403, 'Acceso denegado.');
+        }
+
+        // Traer SOLO ventas concretadas (aceptadas)
+        $ventas = EncabezadoVenta::with(['detalles.producto'])
+            ->where('estado_venta', 'C')   // ← ESTA ES LA CORRECTA
+            ->orderBy('num_venta', 'desc')
+            ->get();
+
+        // Calcular total de cada venta
+        $ventas->transform(function ($venta) {
+            $venta->total_venta = $venta->detalles->sum(function ($d) {
+                return $d->precio * $d->cantidad_item;
+            });
+            return $venta;
+        });
+
+        return view('detalle_venta.index', compact('ventas'));
+    }
+
+
 }
