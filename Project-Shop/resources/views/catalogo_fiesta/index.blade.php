@@ -9,9 +9,10 @@
         @forelse($productos as $producto)
             <div class="col">
                 <div class="card h-100">
-                    <img src="{{ asset('images/' . ($producto->imagen_producto ?? $producto->Imagen_Producto ?? 'placeholder.png')) }}"
-                        class="card-img-top"
-                        alt="{{ $producto->nombre_producto ?? $producto->Nombre_Producto ?? 'Producto' }}">
+                <img src="{{ asset('images/' . $producto->imagen_producto) }}"
+                    class="card-img-top"
+                    alt="{{ $producto->nombre_producto }}"
+                    onerror="this.onerror=null; this.src='{{ asset('images/placeholder.png') }}';">
                     <div class="card-body">
                         <h5 class="card-title">{{ $producto->nombre_producto ?? $producto->Nombre_Producto }}</h5>
                         <p class="card-text">{{ $producto->descripcion_producto ?? $producto->Descripcion_Producto }}</p>
